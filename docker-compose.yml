@@ -1,0 +1,35 @@
+version: "2"
+services:
+  filemanager:
+    image: "filebrowser/filebrowser"
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    entrypoint: /filebrowser
+    command: --port 80 --database /data/database.db --root /srv
+    ports:
+      - "80:80"
+    volumes:
+      - "filebrowser:/data"
+      - "./media:/srv"
+  minidlna:
+    image: "vladgh/minidlna"
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - "./media:/media"
+    environment:
+      MINIDLNA_MEDIA_DIR: /media
+      MINIDLNA_FRIENDLY_NAME: custom-nas
+      MINIDLNA_INOTIFY: "no"
+#  nodejs:
+#    image: "node:buster-slim"
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - "./dashboard:/app"
+#    working_dir: /app
+#    command: npm run start
+
+volumes:
+    filebrowser:
+        external: false
