@@ -1,13 +1,9 @@
 ### Installation
 ```shell
-sudo apt install nodejs docker-compose git && \
 cd ~ && \
+sudo apt install git docker-compose && \
 git clone https://github.com/poulou0/custom-nas.git && \
-printf "[Unit]\nDescription=Start custom nas.\nAfter=multi-user.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/node ${HOME}/custom-nas/dashboard/index.js\n\n[Install]\nWantedBy=multi-user.target\n" | sudo tee /etc/systemd/system/custom-nas.service && \
-sudo systemctl enable custom-nas.service && \
-sudo systemctl start custom-nas.service && \
-cd custom-nas/ && \
-sudo docker-compose up -d
+sudo docker-compose -f ~/custom-nas/docker-compose.yml up -d
 ```
 
 ### Usage
