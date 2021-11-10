@@ -1,13 +1,23 @@
 version: "2"
 services:
-  filemanager:
+  nodejs:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ".:/app"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    working_dir: /app/dashboard
+    command: nodejs index.js
+  filebrowser:
     image: "filebrowser/filebrowser"
     restart: unless-stopped
     user: "${UID}:${GID}"
     entrypoint: /filebrowser
     command: --port 80 --database /data/database.db --root /srv
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       - "filebrowser:/data"
       - "./media:/srv"
@@ -15,21 +25,15 @@ services:
     image: "vladgh/minidlna"
     restart: unless-stopped
     network_mode: "host"
+    ports:
+      - "8200:8200/tcp"
+      - "1900:1900/udp"
     volumes:
       - "./media:/media"
     environment:
       MINIDLNA_MEDIA_DIR: /media
       MINIDLNA_FRIENDLY_NAME: custom-nas
       MINIDLNA_INOTIFY: "no"
-  nodejs:
-    build: .
-    ports:
-      - "8002:8000"
-    volumes:
-      - "./dashboard:/app"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    working_dir: /app
-    command: nodejs index.js
 
 volumes:
     filebrowser:
