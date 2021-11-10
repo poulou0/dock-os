@@ -4,11 +4,13 @@ services:
     build: .
     restart: unless-stopped
     ports:
+      - "443:443"
       - "80:80"
     volumes:
       - ".:/app"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    working_dir: /app/dashboard
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    working_dir: /app/AppData/dashboard
     command: nodejs index.js
   filebrowser:
     image: "filebrowser/filebrowser"
@@ -19,7 +21,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - "filebrowser:/data"
+      - "./AppData/filebrowser:/data"
       - "./media:/srv"
   minidlna:
     image: "vladgh/minidlna"
@@ -34,7 +36,3 @@ services:
       MINIDLNA_MEDIA_DIR: /media
       MINIDLNA_FRIENDLY_NAME: custom-nas
       MINIDLNA_INOTIFY: "no"
-
-volumes:
-    filebrowser:
-        external: false

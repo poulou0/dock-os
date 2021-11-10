@@ -2,7 +2,7 @@
 ### Installation
 ```shell
 cd ~ && \
-sudo apt install git docker-compose && \
+sudo apt install -y git docker-compose && \
 git clone https://github.com/poulou0/custom-nas.git && \
 sudo docker-compose -f ~/custom-nas/docker-compose.yml up -d
 ```
@@ -39,3 +39,8 @@ Example to get "All videos" XML
 curl http://<ip>:8200/ContentDir.xml -H 'SOAPAction:urn:schemas-upnp-org:service:ContentDirectory:1#Browse' --data '<ObjectID>2$8</ObjectID><BrowseFlag>BrowseDirectChildren</BrowseFlag>'
 ```
 Source: https://developer.sony.com/develop/audio-control-api/get-started/browse-dlna-file
+
+### TODO
+
+* Use `spawn` instead of `exec` when needed.
+* Make the containers as plugins

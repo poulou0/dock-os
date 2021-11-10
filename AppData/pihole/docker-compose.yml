@@ -1,0 +1,18 @@
+version: "2"
+services:
+  pihole:
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "8001:80/tcp"
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+    volumes:
+      - './AppData/pihole/etc-AppData/:/etc/AppData/'
+      - './AppData/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    environment:
+      TZ: 'Europe/Amsterdam'
+      WEBPASSWORD: '123456'
