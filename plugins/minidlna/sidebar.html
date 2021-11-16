@@ -1,0 +1,33 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#minidlna-submenu">
+  <span class="plugin-status" id="minidlna-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  MiniDLNA
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="minidlna-submenu">
+  <li class="minidlna-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8200', '_blank');">
+      <i class="fas fa-heartbeat fa-sm"></i>
+      Status
+    </a>
+  </li>
+  <li class="minidlna-when-enabled d-none">
+    <a href="/minidlna-rescan">
+      <i class="fas fa-sync fa-sm"></i>
+      Rescan
+    </a>
+  </li>
+  <li class="minidlna-when-disabled d-none">
+    <a href="/minidlna-start">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="minidlna-when-enabled d-none">
+    <a href="/minidlna-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>
