@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#transmission-submenu">
+  <span class="plugin-status" id="transmission-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  Transmission
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="transmission-submenu">
+  <li class="transmission-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':9091', '_blank');">
+      <i class="fas fa-skull-crossbones fa-sm"></i>
+      Torrents client
+    </a>
+  </li>
+  <li class="transmission-when-disabled d-none">
+    <a href="/transmission-start">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="transmission-when-enabled d-none">
+    <a href="/transmission-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

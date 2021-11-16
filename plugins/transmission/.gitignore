@@ -1,0 +1,9 @@
+# Ignore everything in this directory
+*
+*/*
+# Except this file
+!.gitignore
+!docker-compose.yml
+!sidebar.html
+!footer.js
+!paths.js

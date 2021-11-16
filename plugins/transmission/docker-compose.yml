@@ -1,0 +1,18 @@
+version: "2"
+services:
+  transmission:
+    container_name: transmission
+    image: lscr.io/linuxserver/transmission
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+      - "51413:51413"
+      - "51413:51413/udp"
+    volumes:
+      - ../../media/torrents:/downloads
+      - ./config:/config
+      - ./watch:/watch
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: 'Europe/Amsterdam'
