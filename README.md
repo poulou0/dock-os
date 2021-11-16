@@ -2,13 +2,13 @@
 ### Installation
 ```shell
 cd ~ && \
-sudo apt install -y git docker-compose && \
+sudo apt install -y ssh git docker-compose && \
 git clone https://github.com/poulou0/custom-nas.git && \
 sudo docker-compose -f ~/custom-nas/docker-compose.yml up -d
 ```
 
 ### Usage
-* Dashboard: `http://<ip>`
+* Dashboard: `https://<ip>`
 * File manager: `http://<ip>:8000`
 * MiniDLNA status: `http://<ip>:8200`
 
@@ -42,5 +42,6 @@ Source: https://developer.sony.com/develop/audio-control-api/get-started/browse-
 
 ### TODO
 
+* Make a dialog to create the .env
 * Use `spawn` instead of `exec` when needed.
 * Make the containers as plugins

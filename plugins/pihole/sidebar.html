@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#pihole-submenu">
+  <span class="plugin-status" id="pihole-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  Pi-hole
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="pihole-submenu">
+  <li class="pihole-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8001/admin', '_blank');">
+      <i class="fas fa-tachometer-alt fa-sm"></i>
+      Control panel
+    </a>
+  </li>
+  <li class="pihole-when-disabled d-none">
+    <a onclick="window.location.href = '/pihole-start?WEBPASSWORD=' + prompt('Give a password for the control panel')">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="pihole-when-enabled d-none">
+    <a href="/pihole-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

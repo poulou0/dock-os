@@ -1,6 +1,7 @@
 version: "2"
 services:
   nodejs:
+    container_name: dashboard
     build: .
     restart: unless-stopped
     ports:
@@ -10,20 +11,22 @@ services:
       - ".:/app"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    working_dir: /app/AppData/dashboard
-    command: nodejs index.js
+    working_dir: /app/src
+    command: bash -c "npm install && npm run start"
   filebrowser:
+    container_name: filebrowser
     image: "filebrowser/filebrowser"
     restart: unless-stopped
-    user: "${UID}:${GID}"
     entrypoint: /filebrowser
+    user: "1000:1000"
     command: --port 80 --database /data/database.db --root /srv
     ports:
       - "8000:80"
     volumes:
-      - "./AppData/filebrowser:/data"
+      - "./plugins/filebrowser:/data"
       - "./media:/srv"
   minidlna:
+    container_name: minidlna
     image: "vladgh/minidlna"
     restart: unless-stopped
     network_mode: "host"

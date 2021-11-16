@@ -1,0 +1,15 @@
+{
+  "name": "dock-os_dashboard",
+  "version": "0.0.1",
+  "description": "Dashboard for dock-OS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodejs index.js"
+  },
+  "author": "poulou",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
