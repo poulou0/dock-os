@@ -12,7 +12,7 @@
 <body>
 <nav id="sidebar">
   <div id="dismiss">
-    <i class="fas fa-arrow-right"></i>
+    <i class="fas fa-arrow-left"></i>
   </div>
   <div class="sidebar-header">
     <h3>Plugins</h3>
@@ -23,11 +23,17 @@
 </nav>
 <div id="content">
   <div class="container">
-    <nav class="row justify-content-end navbar navbar-light bg-light">
+    <nav class="row align-items-center navbar navbar-light bg-light">
       <div class="col-6">
-        <button type="button" id="sidebarCollapse" class="btn btn-primary float-end">
-          <span>Plugins</span>
+        <button type="button" id="sidebarCollapse" class="btn btn-primary ">
+          Plugins
         </button>
+      </div>
+      <div class="col-6">
+        <a onclick="if (confirm('Are you sure that you want to shutdown?')) window.location.href = '/shutdown'"
+           class="btn btn-outline-dark btn-lg float-end">
+          <i class="fas fa-power-off"></i>
+        </a>
       </div>
     </nav>
     <div id="widgets" class="row justify-content-start">
