@@ -58,12 +58,20 @@ const requestListener = function (req, res) {
     case "/sidebar.html":
       const sidebar_html_files = fs.readdirSync("../plugins/")
         .map((v) => "../plugins/" + v)
-        .map((f)=> fs.existsSync(f + "/sidebar.html") ? fs.readFileSync(f+ "/sidebar.html") : "")
-        .map((html) => "<li>" + html + "</li>")
+        .map((f)=> fs.existsSync(f + "/sidebar.html") ? "<li>" + fs.readFileSync(f+ "/sidebar.html") + "</li>" : "")
         .join("");
       res.setHeader("Content-Type", "text/html");
       res.writeHead(200);
       res.end(sidebar_html_files);
+      break
+    case "/widgets.html":
+      const widgets_html_files = fs.readdirSync("../plugins/")
+        .map((v) => "../plugins/" + v)
+        .map((f)=> fs.existsSync(f + "/widgets.html") ? fs.readFileSync(f+ "/widgets.html") : "")
+        .join("");
+      res.setHeader("Content-Type", "text/html");
+      res.writeHead(200);
+      res.end(widgets_html_files);
       break
     case "/footer-plugins.js":
       const footer_js_files = fs.readdirSync("../plugins/")

@@ -1,1 +1,7 @@
 .env
+plugins/*/*
+!plugins/*/docker-compose.yml
+!plugins/*/sidebar.html
+!plugins/*/footer.js
+!plugins/*/paths.js
+!plugins/*/widgets.html

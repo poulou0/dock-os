@@ -22,25 +22,30 @@
   </ul>
 </nav>
 <div id="content">
-  <nav class="navbar navbar-light bg-light">
-    <form class="container-fluid justify-content-space-between">
-      <div>
-        <button class="btn btn-outline-success me-2" type="button" onclick="location.href='/minidlna-rescan';">
-          MiniDLNA rescan
+  <div class="container">
+    <nav class="row justify-content-end navbar navbar-light bg-light">
+      <div class="col-6">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary float-end">
+          <span>Plugins</span>
         </button>
       </div>
-      <button type="button" id="sidebarCollapse" class="btn btn-primary">
-        <span>Plugins</span>
-      </button>
-    </form>
-  </nav>
-  <div class="form-floating">
-    <textarea readonly class="form-control" id="df-h"></textarea>
-    <label for="df-h">Disk usage</label>
-  </div>
-  <div class="form-floating">
-    <textarea readonly class="form-control" id="docker-ps"></textarea>
-    <label for="docker-ps">Docker containers</label>
+    </nav>
+    <div id="widgets" class="row justify-content-start">
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6 mt-2">
+        <div class="form-floating">
+          <textarea readonly class="form-control" id="df-h"></textarea>
+          <label for="df-h">Disk usage</label>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 mt-2">
+        <div class="form-floating ">
+          <textarea readonly class="form-control" id="docker-ps"></textarea>
+          <label for="docker-ps">Docker containers</label>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div class="overlay"></div>
@@ -64,35 +69,44 @@
     document.querySelector("#sidebar").classList.add("active");
     document.querySelector(".overlay").classList.add("active");
   });
-  fetch('/sidebar.html', {method: 'get'})
-    .then((response) => response.text())
-    .then(function (response) {
-      document.querySelector("#sidebar > ul").innerHTML = response;
-    })
-    .catch(function (err) {
-      console.error(err);
-    });
-
-  fetch('/df-h', {method: 'get'})
-    .then(response => response.json())
-    .then(function (response) {
-      document.querySelector("#df-h").innerHTML = response.result;
-    })
-    .catch(function (err) {
-      console.error(err);
-    });
-
-  fetch('/docker-ps', {method: 'get'})
-    .then(response => response.json())
-    .then(function (response) {
-      const textareaDockerPs = document.querySelector("#docker-ps");
-      textareaDockerPs.innerHTML = response.result;
-      textareaDockerPs.style.height = (textareaDockerPs.scrollHeight + 5) + 'px';
-      textareaDockerPs.dispatchEvent(new CustomEvent('docker-ps', {detail: response.result}));
-    })
-    .catch(function (err) {
-      console.error(err);
-    });
+  Promise.all([
+    fetch('/sidebar.html', {method: 'get'})
+      .then((response) => response.text())
+      .then(function (response) {
+        document.querySelector("#sidebar > ul").innerHTML = response;
+      })
+      .catch(function (err) {
+        console.error(err);
+      }),
+    fetch('/widgets.html', {method: 'get'})
+      .then((response) => response.text())
+      .then(function (response) {
+        document.querySelector("#widgets").innerHTML = response;
+      })
+      .catch(function (err) {
+        console.error(err);
+      }),
+    fetch('/df-h', {method: 'get'})
+      .then(response => response.json())
+      .then(function (response) {
+        document.querySelector("#df-h").innerHTML = response.result;
+      })
+      .catch(function (err) {
+        console.error(err);
+      }),
+  ]).then(() => {
+    fetch('/docker-ps', {method: 'get'})
+      .then(response => response.json())
+      .then(function (response) {
+        const textareaDockerPs = document.querySelector("#docker-ps");
+        textareaDockerPs.innerHTML = response.result;
+        textareaDockerPs.style.height = (textareaDockerPs.scrollHeight + 5) + 'px';
+        textareaDockerPs.dispatchEvent(new CustomEvent('docker-ps', {detail: response.result}));
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
+  });
 </script>
 </body>
 </html>
