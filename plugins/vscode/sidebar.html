@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#vscode-submenu">
+  <span class="plugin-status" id="vscode-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  VS Code
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="vscode-submenu">
+  <li class="vscode-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8003', '_blank');">
+      <i class="fas fa-folder-open fa-sm"></i>
+      Open
+    </a>
+  </li>
+  <li class="vscode-when-disabled d-none">
+    <a href="/vscode-start">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="vscode-when-enabled d-none">
+    <a href="/vscode-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

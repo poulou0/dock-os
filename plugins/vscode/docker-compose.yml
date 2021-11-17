@@ -1,0 +1,15 @@
+version: "2"
+services:
+  vscode:
+    container_name: vscode
+    image: lscr.io/linuxserver/code-server
+    restart: unless-stopped
+    ports:
+      - "8003:8443"
+    volumes:
+      - ./config:/config
+      - ../../media/:/media
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: 'Europe/Amsterdam'
