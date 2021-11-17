@@ -1,0 +1,15 @@
+version: "2"
+services:
+  filezilla:
+    container_name: filezilla
+    image: lscr.io/linuxserver/filezilla
+    restart: unless-stopped
+    ports:
+      - "8004:3000"
+    volumes:
+      - ./config:/config
+      - ../../media/:/home
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Amsterdam
