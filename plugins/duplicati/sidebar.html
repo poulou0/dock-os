@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#duplicati-submenu">
+  <span class="plugin-status" id="duplicati-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  Duplicati
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="duplicati-submenu">
+  <li class="duplicati-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8006', '_blank');">
+      <i class="fas fa-copy fa-sm"></i>
+      Open
+    </a>
+  </li>
+  <li class="duplicati-when-disabled d-none">
+    <a href="/duplicati-start">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="duplicati-when-enabled d-none">
+    <a href="/duplicati-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

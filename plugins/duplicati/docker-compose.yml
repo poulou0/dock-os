@@ -1,0 +1,15 @@
+version: "2"
+services:
+  duplicati:
+    container_name: duplicati
+    image: lscr.io/linuxserver/duplicati
+    restart: unless-stopped
+    ports:
+      - "8006:8200"
+    volumes:
+      - '../../media:/source'
+      - '/mnt:/mnt'
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Amsterdam
