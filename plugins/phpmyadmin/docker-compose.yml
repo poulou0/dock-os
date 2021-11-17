@@ -1,0 +1,27 @@
+version: "2.1"
+services:
+  mariadb:
+    container_name: phpmyadmin_db
+    image: mariadb:10.3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    ports:
+      - "3306:3306"
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: lscr.io/linuxserver/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8002:80"
+    volumes:
+      - "./config:/config"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      PMA_ARBITRARY: 1
+      PMA_HOST: mariadb
+#      PMA_USER: root
+#      PMA_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    links:
+      - "mariadb"
