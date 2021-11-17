@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#filebrowser-submenu">
+  <span class="plugin-status" id="filebrowser-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  File Browser
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="filebrowser-submenu">
+  <li class="filebrowser-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8000', '_blank');">
+      <i class="fas fa-folder-open fa-sm"></i>
+      Open
+    </a>
+  </li>
+  <li class="filebrowser-when-disabled d-none">
+    <a href="/filebrowser-start">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="filebrowser-when-enabled d-none">
+    <a href="/filebrowser-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>
