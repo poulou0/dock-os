@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#libreoffice-submenu">
+  <span class="plugin-status" id="libreoffice-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  LibreOffice
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="libreoffice-submenu">
+  <li class="libreoffice-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':3000', '_blank');">
+      <i class="fas fa-book fa-sm"></i>
+      Open
+    </a>
+  </li>
+  <li class="libreoffice-when-disabled d-none">
+    <a href="/libreoffice-start">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="libreoffice-when-enabled d-none">
+    <a href="/libreoffice-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

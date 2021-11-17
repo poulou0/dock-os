@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+  libreoffice:
+    container_name: libreoffice
+    image: lscr.io/linuxserver/libreoffice
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ./config:/config
+      - ../../media:/media
+    ports:
+      - 3000:3000
+    restart: unless-stopped
