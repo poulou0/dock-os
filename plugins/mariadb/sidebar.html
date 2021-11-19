@@ -1,0 +1,21 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#mariadb-submenu">
+  <span class="plugin-status" id="mariadb-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  MariaDB
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="mariadb-submenu">
+  <li class="mariadb-when-disabled d-none">
+    <a onclick="window.location.href = '/mariadb-start?MARIADB_ROOT_PASSWORD=' + prompt('Give a password for root user')">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="mariadb-when-enabled d-none">
+    <a href="/mariadb-remove">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

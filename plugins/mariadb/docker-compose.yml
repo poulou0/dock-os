@@ -1,0 +1,10 @@
+version: "2.1"
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+    ports:
+      - "3306:3306"

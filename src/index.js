@@ -98,7 +98,7 @@ const requestListener = function (req, res) {
       break
     case "/docker-ps":
       res.setHeader("Content-Type", "application/json");
-      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S docker ps --format \'table {{.Names}}\t{{.Status}}\'"',
+      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S docker ps --format \'table {{.Names}}\t{{.Status}}\t{{.Ports}}\'"',
         (error, stdout, stderr) => {
           if (error) return console.error(`exec error: ${error}`);
           res.end(JSON.stringify({result: `${stdout}`}));
