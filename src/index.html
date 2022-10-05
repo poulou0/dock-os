@@ -25,13 +25,17 @@
     <nav class="row align-items-center navbar navbar-dark bg-dark">
       <div class="col-6">
         <button type="button" id="sidebarCollapse" class="btn btn-primary ">
-          Plugins
+          <i class="fas fa-bars"></i>
+          &nbsp;&nbsp;Plugins
         </button>
       </div>
       <div class="col-6">
         <a onclick="if (confirm('Are you sure that you want to shutdown?')) window.location.href = '/shutdown'"
            class="btn btn-secondary btn-lg float-end">
           <i class="fas fa-power-off"></i>
+        </a>
+        <a href="/ui-log.txt" target="_blank" class="btn btn-secondary float-end mt-1">
+          Full log
         </a>
       </div>
     </nav>
@@ -54,6 +58,18 @@
   </div>
 </div>
 <div class="overlay"></div>
+<div class="terminal-output">
+  <pre></pre>
+  <a class="btn btn-secondary close">
+    Close
+  </a>
+  <a href="/ui-log.txt" target="_blank" class="btn btn-secondary">
+    Full log
+  </a>
+  <a href="javascript: location.reload()" class="btn btn-primary">
+    Reload
+  </a>
+</div>
 <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/solid.js"
         crossorigin="anonymous"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/fontawesome.js"
@@ -65,8 +81,10 @@
 <script>
   // sidebar
   const dismissHandler = () => {
-    document.querySelector("#sidebar").classList.remove("active");
-    document.querySelector(".overlay").classList.remove("active");
+    if (document.querySelector('.terminal-output').offsetParent === null) {
+      document.querySelector("#sidebar").classList.remove("active");
+      document.querySelector(".overlay").classList.remove("active");
+    }
   }
   document.querySelector("#dismiss").addEventListener("click", dismissHandler);
   document.querySelector(".overlay").addEventListener("click", dismissHandler);
@@ -74,6 +92,9 @@
     document.querySelector("#sidebar").classList.add("active");
     document.querySelector(".overlay").classList.add("active");
   });
+  document.querySelector('.terminal-output .close').addEventListener("click", () => {
+    document.querySelector('.terminal-output').style.display = 'none';
+  })
   Promise.all([
     fetch('/sidebar.html', {method: 'get'})
       .then((response) => response.text())
@@ -111,6 +132,40 @@
       .catch(function (err) {
         console.error(err);
       });
+
+    const terminalOutputLinks = document.querySelectorAll('.terminal-output-link');
+    for (let i = 0; i < terminalOutputLinks.length; ++i) {
+      terminalOutputLinks[i].addEventListener('click', (e) => {
+        e.preventDefault();
+        let urlQuery = '';
+        if (terminalOutputLinks[i].getAttribute('data-env-variable-name') && terminalOutputLinks[i].getAttribute('data-env-variable-question')) {
+          const answer = prompt(terminalOutputLinks[i].getAttribute('data-env-variable-question'), terminalOutputLinks[i].getAttribute('data-env-variable-answer') || '');
+          if (!answer) return;
+          urlQuery = '?' + terminalOutputLinks[i].getAttribute('data-env-variable-name') + '=' + answer;
+        }
+        const terminalOutput = document.querySelector('.terminal-output');
+        terminalOutput.style.display = 'flex';
+        const requestLog = () => fetch('/ui-log.txt/tail', {method: 'get'})
+            .then(async (data) => terminalOutput.querySelector('pre').textContent = (await data.text())
+              .replaceAll('[1A', "")
+              .replaceAll('[1B', "")
+              .replaceAll('[2K', "")
+              .replaceAll('[0m', "\n")
+              .replaceAll('[32m', "")
+            );
+        setTimeout(requestLog, 500);
+        const terminalOutputInterval = setInterval(requestLog, 1000);
+        fetch(terminalOutputLinks[i].getAttribute('href') + urlQuery, {method: 'GET'})
+          .finally(() => {
+            const terminalOutputButtons = terminalOutput.querySelectorAll('a');
+            for (let j = 0; j < terminalOutputButtons.length; ++j) {
+              terminalOutputButtons[j].style.display = 'block';
+            }
+            clearInterval(terminalOutputInterval);
+            setTimeout(requestLog, 500);
+          });
+      });
+    }
   });
 </script>
 </body>

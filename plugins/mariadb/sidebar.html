@@ -7,13 +7,13 @@
 </a>
 <ul class="collapse list-unstyled" id="mariadb-submenu">
   <li class="mariadb-when-disabled d-none">
-    <a onclick="window.location.href = '/mariadb-start?MARIADB_ROOT_PASSWORD=' + prompt('Give a password for root user')">
+    <a href="/mariadb-start" class="terminal-output-link" data-env-variable-name="MARIADB_ROOT_PASSWORD" data-env-variable-question="Give a password for root user">
       <i class="fas fa-play fa-sm"></i>
       Start
     </a>
   </li>
   <li class="mariadb-when-enabled d-none">
-    <a href="/mariadb-remove">
+    <a href="/mariadb-remove" class="terminal-output-link">
       <i class="fas fa-trash-alt fa-sm"></i>
       Remove
     </a>

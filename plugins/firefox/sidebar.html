@@ -13,13 +13,13 @@
     </a>
   </li>
   <li class="firefox-when-disabled d-none">
-    <a onclick="window.location.href = '/firefox-start?SHM_SIZE=' + prompt('Give the \'shm_size\'', '1gb')">
+    <a href="/firefox-start" class="terminal-output-link" data-env-variable-name="SHM_SIZE" data-env-variable-question="Give the 'shm_size'" data-env-variable-answer="1gb">
       <i class="fas fa-play fa-sm"></i>
       Start
     </a>
   </li>
   <li class="firefox-when-enabled d-none">
-    <a href="/firefox-remove">
+    <a href="/firefox-remove" class="terminal-output-link">
       <i class="fas fa-trash-alt fa-sm"></i>
       Remove
     </a>

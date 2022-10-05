@@ -13,13 +13,13 @@
     </a>
   </li>
   <li class="pihole-when-disabled d-none">
-    <a onclick="window.location.href = '/pihole-start?WEBPASSWORD=' + prompt('Give a password for the control panel')">
+    <a href="/pihole-start" class="terminal-output-link" data-env-variable-name="WEBPASSWORD" data-env-variable-question="Give a password for the control panel">
       <i class="fas fa-play fa-sm"></i>
       Start
     </a>
   </li>
   <li class="pihole-when-enabled d-none">
-    <a href="/pihole-remove">
+    <a href="/pihole-remove" class="terminal-output-link">
       <i class="fas fa-trash-alt fa-sm"></i>
       Remove
     </a>

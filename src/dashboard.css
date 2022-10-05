@@ -7,7 +7,7 @@
     top: 0;
     left: -250px;
     height: 100vh;
-    z-index: 999;
+    z-index: 998;
     background: #4e5d6c;
     color: #fff;
     transition: all 0.3s;
@@ -42,7 +42,7 @@
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
+    z-index: 997;
     opacity: 0;
     transition: all 0.5s ease-in-out;
 }
@@ -121,4 +121,33 @@ a:focus {
 .form-floating > textarea#docker-ps.form-control { height: 180px }
 .form-floating > textarea.form-control:not(:placeholder-shown) {
     padding-top: 2.2rem;
+}
+.navbar .btn { margin-left: 5px; }
+.terminal-output {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 10px;
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    background-color: black;
+    color: white;
+    overflow: scroll;
+    font-family: courier, serif;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 20px;
+    z-index: 999;
+    flex-direction: column;
+}
+.terminal-output pre {
+    flex: 1;
+    margin: 0 0 10px;
+    padding-bottom: 5px;
+}
+.terminal-output a {
+    display: none;
+    margin: 1px;
 }

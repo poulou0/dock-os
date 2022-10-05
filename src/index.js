@@ -1,35 +1,54 @@
 const fs = require('fs');
-const {exec} = require("child_process");
+const {exec, spawn} = require("child_process");
 const https = require('https');
 const http = require('http');
 const url = require("url");
+
+const USER = process.env.USER;
+const PASSWORD = process.env.PASSWORD;
+const ROOT_DIR = process.env.ROOT_DIR;
+const host = '0.0.0.0';
+const port = 443;
+
 let paths = [];
 fs.readdirSync("../plugins/")
   .map((v) => "../plugins/" + v)
-  .map((f)=> fs.existsSync(f + "/paths.js") ? f+ "/paths.js" : "")
+  .map((f) => fs.existsSync(f + "/paths.js") ? f + "/paths.js" : "")
   .filter((f) => f.length)
   .forEach((file) => {
     paths.push(require(file));
-  })
-
-const dotenv = require('dotenv');
-dotenv.config({path:__dirname+'/../.env'});
-
-const host = '0.0.0.0';
-const port = 443;
-const USER = process.env.USER;
-const PASSWORD = process.env.PASSWORD;
-const ROOT_DIR = process.env.USER_HOME + '/custom-nas';
+  });
 
 const requestListener = function (req, res) {
   const { pathname, query } = url.parse(req.url);
   for (const mod of paths) {
     for (const path of Object.keys(mod)) {
       if (pathname === mod[path].pathname) {
+        // var child = spawn('sshpass', [
+        //   '-p', PASSWORD,
+        //   'ssh', USER + '@host.docker.internal',
+        //   '-o', 'StrictHostKeyChecking=no',
+        //   '"\"echo ' + PASSWORD + ' | sudo -S bash -c \'' +
+        //     (query || '') + ' ' + mod[path].commands({ROOT_DIR}).join(' && ' + (query || '') + ' ') +
+        //   ' 2>&1\' >> '+ROOT_DIR+'/last-output.txt\""',
+        // ]);
+        // child.stdout.setEncoding('utf8');
+        // child.stdout.on('data', (data) => {
+        //   console.log(data.toString());
+        //   fs.appendFile('./last-output.txt', data.toString());
+        // });
+        // child.stdout.on('close', function() {
+        //   res.writeHead(302, {location: "/"});
+        //   res.end();
+        // });
+        exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
+          + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
+          + mod[path].commands({ROOT_DIR}).join('\\n#   && ' + (query || ''))
+          + '\\n\\n\\" >> ' + ROOT_DIR + '/ui-log.txt"');
         exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
-            +  'sudo -S bash -c \''
-              + (query ? query : '') + ' ' + mod[path].commands({ROOT_DIR}).join(' && ' + (query ? query : '') + ' ')
-            + '\'"', () => {
+          + 'sudo -S bash -c \''
+          + (query ? query : '') + ' ' + mod[path].commands({ROOT_DIR}).join(' && ' + (query ? query : '') + ' ')
+          + ' 2>&1\' >> ' + ROOT_DIR + '/ui-log.txt"', () => {
           res.writeHead(302, {location: "/"});
           res.end();
         });
@@ -90,12 +109,6 @@ const requestListener = function (req, res) {
           res.end(contents);
         })
       break
-    case "/minidlna-rescan":
-      // https://serverfault.com/a/512220 + https://askubuntu.com/a/123080
-      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S docker exec minidlna /bin/bash -c \'minidlnad -r\'"');
-      res.writeHead(302, {location: "/"});
-      res.end();
-      break
     case "/docker-ps":
       res.setHeader("Content-Type", "application/json");
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S docker ps --format \'table {{.Names}}\t{{.Status}}\t{{.Ports}}\'"',
@@ -113,10 +126,22 @@ const requestListener = function (req, res) {
         })
       break
     case "/shutdown":
-      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
-        +  'sudo -S bash -c \'shutdown now\'"');
+      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S bash -c \'shutdown now\'"');
       res.writeHead(302, {location: "/"});
       res.end();
+      break
+    case "/ui-log.txt/tail":
+      res.setHeader("Content-Type", "text/plain");
+      exec('tail ../ui-log.txt',
+        (error, stdout, stderr) => {
+          if (error) return console.error(`exec error: ${error}`);
+          res.end(stdout);
+        })
+      break
+    case "/ui-log.txt":
+      res.setHeader("Content-Type", "text/plain");
+      const buffer = fs.readFileSync("../ui-log.txt");
+      res.end(buffer.toString());
       break
   }
 }

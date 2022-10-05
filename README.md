@@ -43,5 +43,4 @@ Source: https://developer.sony.com/develop/audio-control-api/get-started/browse-
 ### TODO
 
 * Make a dialog to create the .env
-* Use `spawn` instead of `exec` when needed.
-* Make the containers as plugins
+* Make a 'purge config' button for every entry when its stopped

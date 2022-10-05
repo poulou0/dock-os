@@ -4,6 +4,8 @@ services:
     container_name: dashboard
     build: .
     restart: unless-stopped
+    env_file:
+      - .env
     ports:
       - "443:443"
       - "80:80"
@@ -12,4 +14,4 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     working_dir: /app/src
-    command: bash -c "npm install && npm run start"
+    command: node index.js
