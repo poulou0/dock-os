@@ -20,6 +20,12 @@ fs.readdirSync("../plugins/")
   });
 
 const requestListener = function (req, res) {
+  if (req.headers.authorization !== "Basic " + Buffer.from(`${USER}:${PASSWORD}`).toString("base64")) {
+    res.setHeader("WWW-Authenticate", 'Basic realm="User Visible Realm"');
+    res.writeHead(401);
+    return res.end();
+  }
+
   let { pathname, query } = url.parse(req.url);
   query = query?.replaceAll('&', ' ');
   for (const mod of paths) {
