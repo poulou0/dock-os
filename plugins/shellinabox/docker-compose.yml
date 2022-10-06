@@ -1,0 +1,13 @@
+version: "2"
+services:
+  shellinabox:
+    container_name: shellinabox
+    image: sspreitzer/shellinabox:latest
+    restart: unless-stopped
+    ports:
+      - "8007:4200"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      SIAB_SSL: "false"
+      SIAB_SERVICE: "/:SSH:host.docker.internal"
