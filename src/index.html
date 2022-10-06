@@ -139,9 +139,16 @@
         e.preventDefault();
         let urlQuery = '';
         if (terminalOutputLinks[i].getAttribute('data-env-variable-name') && terminalOutputLinks[i].getAttribute('data-env-variable-question')) {
-          const answer = prompt(terminalOutputLinks[i].getAttribute('data-env-variable-question'), terminalOutputLinks[i].getAttribute('data-env-variable-answer') || '');
-          if (!answer) return;
-          urlQuery = '?' + terminalOutputLinks[i].getAttribute('data-env-variable-name') + '=' + answer;
+          const name =terminalOutputLinks[i].getAttribute('data-env-variable-name')?.split('|');
+          const questions = terminalOutputLinks[i].getAttribute('data-env-variable-question')?.split('|');
+          const answers = terminalOutputLinks[i].getAttribute('data-env-variable-answer')?.split('|');
+          const urlQueryArray = [];
+          for (let j = 0; j < questions.length; ++j) {
+            const answer = prompt(questions[j], answers?.[j] || '');
+            if (!answer) return;
+            urlQueryArray.push(name[j] + '=' + answer);
+          }
+          urlQuery = '?' + urlQueryArray.join('&');
         }
         const terminalOutput = document.querySelector('.terminal-output');
         terminalOutput.style.display = 'flex';

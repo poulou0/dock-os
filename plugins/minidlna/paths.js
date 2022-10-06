@@ -17,9 +17,9 @@ module.exports = {
   },
   rescan: {
     pathname: "/minidlna-rescan",
-    commands: () => {
+    commands: ({ROOT_DIR}) => {
       return [
-        "docker exec minidlna /bin/bash -c 'minidlnad -r'",
+        "docker-compose -f " + ROOT_DIR + "/plugins/minidlna/docker-compose.yml exec minidlna /bin/bash -c 'minidlnad -r'",
       ];
     }
   }

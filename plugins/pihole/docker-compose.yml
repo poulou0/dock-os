@@ -4,16 +4,16 @@ services:
     container_name: pihole
     image: pihole/pihole:latest
     restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
+#    cap_add:
+#      - NET_ADMIN
     ports:
       - "8001:80/tcp"
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
+      - "${HOSTIP}:53:53/tcp"
+      - "${HOSTIP}:53:53/udp"
+#      - "127.0.0.1:67:67/udp"
     volumes:
-      - './plugins/pihole/etc-AppData/:/etc/AppData/'
-      - './plugins/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
     environment:
       TZ: 'Europe/Amsterdam'
       WEBPASSWORD: "${WEBPASSWORD}"

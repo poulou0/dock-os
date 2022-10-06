@@ -20,7 +20,8 @@ fs.readdirSync("../plugins/")
   });
 
 const requestListener = function (req, res) {
-  const { pathname, query } = url.parse(req.url);
+  let { pathname, query } = url.parse(req.url);
+  query = query?.replaceAll('&', ' ');
   for (const mod of paths) {
     for (const path of Object.keys(mod)) {
       if (pathname === mod[path].pathname) {
@@ -43,7 +44,7 @@ const requestListener = function (req, res) {
         // });
         exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
           + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
-          + mod[path].commands({ROOT_DIR}).join('\\n#   && ' + (query || ''))
+          + (query || '') + ' ' + mod[path].commands({ROOT_DIR}).join('\\n#   && ' + (query || '') + ' ')
           + '\\n\\n\\" >> ' + ROOT_DIR + '/ui-log.txt"');
         exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
           + 'sudo -S bash -c \''

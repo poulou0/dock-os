@@ -5,7 +5,6 @@ services:
     image: "filebrowser/filebrowser"
     restart: unless-stopped
     entrypoint: /filebrowser
-    user: "1000:1000"
     command: --port 80 --database /data/database.db --root /srv
     ports:
       - "8000:80"
