@@ -88,7 +88,7 @@ ul ul a {
     padding: 8px 0 8px 30px !important;
     background-color: #455260;
 }
-ul ul a svg {
+ul ul a i {
     margin-right: 8px;
 }
 
@@ -122,7 +122,6 @@ a:focus {
 .form-floating > textarea.form-control:not(:placeholder-shown) {
     padding-top: 2.2rem;
 }
-.navbar .btn { margin-left: 5px; }
 .terminal-output {
     position: absolute;
     left: 50%;

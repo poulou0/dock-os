@@ -132,6 +132,11 @@ const requestListener = function (req, res) {
           res.end(JSON.stringify({result: `${stdout}`}));
         })
       break
+    case "/restart":
+      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S bash -c \'reboot\'"');
+      res.writeHead(302, {location: "/"});
+      res.end();
+      break
     case "/shutdown":
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S bash -c \'shutdown now\'"');
       res.writeHead(302, {location: "/"});
