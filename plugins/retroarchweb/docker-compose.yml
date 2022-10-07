@@ -1,0 +1,9 @@
+version: "2"
+services:
+  retroarchweb:
+    container_name: retroarchweb
+    image: inglebard/retroarch-web
+    restart: unless-stopped
+    ports:
+      - "8009:80"
+
