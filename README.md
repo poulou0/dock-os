@@ -2,7 +2,7 @@
 ### Installation
 ```shell
 cd ~ && \
-sudo apt install -y ssh git docker-compose && \
+sudo apt install -y ssh git docker-compose openssl && \
 git clone https://github.com/poulou0/custom-nas.git && \
 sudo docker-compose -f ~/custom-nas/docker-compose.yml up -d
 ```
@@ -42,5 +42,5 @@ Source: https://developer.sony.com/develop/audio-control-api/get-started/browse-
 
 ### TODO
 
-* Make a dialog to create the .env
+* Make a dialog to create the .env + generate self-signed certs
 * Make a 'purge config' button for every entry when its stopped (and/or system prune -a --volumes https://docs.docker.com/engine/reference/commandline/system_prune/)
