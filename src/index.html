@@ -154,22 +154,17 @@
         }
         const terminalOutput = document.querySelector('.terminal-output');
         terminalOutput.style.display = 'flex';
+        const terminalOutputButtons = terminalOutput.querySelectorAll('a');
+        for (let j = 0; j < terminalOutputButtons.length; ++j) terminalOutputButtons[j].style.display = 'none';
         const requestLog = () => fetch('/ui-log.txt/tail', {method: 'get'})
             .then(async (data) => terminalOutput.querySelector('pre').textContent = (await data.text())
-              .replaceAll('[1A', "")
-              .replaceAll('[1B', "")
-              .replaceAll('[2K', "")
-              .replaceAll('[0m', "\n")
-              .replaceAll('[32m', "")
+              .replaceAll('[1A', "").replaceAll('[1B', "").replaceAll('[2K', "").replaceAll('[0m', "\n").replaceAll('[32m', "")
             );
         setTimeout(requestLog, 500);
         const terminalOutputInterval = setInterval(requestLog, 1000);
         fetch(terminalOutputLinks[i].getAttribute('href') + urlQuery, {method: 'GET'})
           .finally(() => {
-            const terminalOutputButtons = terminalOutput.querySelectorAll('a');
-            for (let j = 0; j < terminalOutputButtons.length; ++j) {
-              terminalOutputButtons[j].style.display = 'block';
-            }
+            for (let j = 0; j < terminalOutputButtons.length; ++j) terminalOutputButtons[j].style.display = 'block';
             clearInterval(terminalOutputInterval);
             setTimeout(requestLog, 500);
           });

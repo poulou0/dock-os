@@ -5,14 +5,14 @@ services:
     image: lscr.io/linuxserver/transmission
     restart: unless-stopped
     ports:
-      - "9091:9091"
+      - "8010:9091"
       - "51413:51413"
       - "51413:51413/udp"
     volumes:
       - ../../media/torrents:/downloads
       - ./config:/config
       - ./watch:/watch
+      - /etc/localtime:/etc/localtime:ro
     environment:
       PUID: 1000
       PGID: 1000
-      TZ: 'Europe/Amsterdam'

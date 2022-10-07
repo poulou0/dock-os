@@ -12,8 +12,8 @@ services:
       - "${HOSTIP}:53:53/udp"
 #      - "127.0.0.1:67:67/udp"
     volumes:
-      - './etc-pihole/:/etc/pihole/'
-      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - ./etc/pihole/:/etc/pihole/
+      - ./etc/dnsmasq.d/:/etc/dnsmasq.d/
+      - /etc/localtime:/etc/localtime:ro
     environment:
-      TZ: 'Europe/Amsterdam'
       WEBPASSWORD: "${WEBPASSWORD}"

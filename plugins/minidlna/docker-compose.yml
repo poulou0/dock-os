@@ -6,7 +6,8 @@ services:
     restart: unless-stopped
     network_mode: "host"
     volumes:
-      - "../../media:/media"
+      - ../../media:/media
+      - /etc/localtime:/etc/localtime:ro
     environment:
       PUID: 1000
       PGID: 1000

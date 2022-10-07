@@ -44,4 +44,3 @@ Source: https://developer.sony.com/develop/audio-control-api/get-started/browse-
 
 * Make a dialog to create the .env
 * Make a 'purge config' button for every entry when its stopped (and/or system prune -a --volumes https://docs.docker.com/engine/reference/commandline/system_prune/)
-* Make the 'TZ' a variable

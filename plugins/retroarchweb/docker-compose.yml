@@ -6,4 +6,6 @@ services:
     restart: unless-stopped
     ports:
       - "8009:80"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
 

@@ -9,7 +9,7 @@ services:
     volumes:
       - ./config:/config
       - ../../media/:/home
+      - /etc/localtime:/etc/localtime:ro
     environment:
       PUID: 1000
       PGID: 1000
-      TZ: Europe/Amsterdam

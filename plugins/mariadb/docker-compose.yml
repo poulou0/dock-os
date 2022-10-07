@@ -4,6 +4,9 @@ services:
     container_name: mariadb
     image: mariadb
     restart: unless-stopped
+    volumes:
+      - ./var/lib/mysql:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
     environment:
       MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
     ports:

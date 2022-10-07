@@ -9,7 +9,8 @@ services:
     ports:
       - "8002:80"
     volumes:
-      - "./config:/config"
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
     environment:
       PUID: 1000
       PGID: 1000

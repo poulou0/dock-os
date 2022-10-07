@@ -8,6 +8,10 @@ services:
       - "8007:4200"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./home:/home
+      - ./var/log/supervisor:/var/log/supervisor
     environment:
       SIAB_SSL: "false"
       SIAB_SERVICE: "/:SSH:host.docker.internal"
