@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#homeassistant-submenu">
+  <span class="plugin-status" id="homeassistant-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  Home assistant
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="homeassistant-submenu">
+  <li class="homeassistant-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8123', '_blank');">
+      <i class="fas fa-house-signal fa-sm"></i>
+      Open
+    </a>
+  </li>
+  <li class="homeassistant-when-disabled d-none">
+    <a href="/homeassistant-start" class="terminal-output-link">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="homeassistant-when-enabled d-none">
+    <a href="/homeassistant-remove" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

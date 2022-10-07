@@ -1,0 +1,12 @@
+version: "2"
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    restart: unless-stopped
+    volumes:
+      - ./config:/config
+      - ../../media:/media
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    network_mode: host
