@@ -98,7 +98,7 @@
     document.querySelector('.terminal-output').style.display = 'none';
   })
   Promise.all([
-    fetch('/sidebar.html', {method: 'get'})
+    fetch(location.href + 'sidebar.html', {method: 'get'})
       .then((response) => response.text())
       .then(function (response) {
         document.querySelector("#sidebar > ul").innerHTML = response;
@@ -106,7 +106,7 @@
       .catch(function (err) {
         console.error(err);
       }),
-    fetch('/widgets.html', {method: 'get'})
+    fetch(location.href + 'widgets.html', {method: 'get'})
       .then((response) => response.text())
       .then(function (response) {
         document.querySelector("#widgets").innerHTML = response;
@@ -114,7 +114,7 @@
       .catch(function (err) {
         console.error(err);
       }),
-    fetch('/df-h', {method: 'get'})
+    fetch(location.href + 'df-h', {method: 'get'})
       .then(response => response.json())
       .then(function (response) {
         document.querySelector("#df-h").innerHTML = response.result;
@@ -123,7 +123,7 @@
         console.error(err);
       }),
   ]).then(() => {
-    fetch('/docker-ps', {method: 'get'})
+    fetch(location.href + 'docker-ps', {method: 'get'})
       .then(response => response.json())
       .then(function (response) {
         const textareaDockerPs = document.querySelector("#docker-ps");

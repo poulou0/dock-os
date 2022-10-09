@@ -95,6 +95,11 @@ ul ul a i {
 /* ---------------------------------------------------
     GLOBAL STYLE
 ----------------------------------------------------- */
+.row:not(.navbar) > div {
+    padding-right: calc(var(--bs-gutter-x) * .15);
+    padding-left: calc(var(--bs-gutter-x) * .15);
+}
+
 a,
 a:hover,
 a:focus {

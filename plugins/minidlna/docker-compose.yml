@@ -9,7 +9,5 @@ services:
       - ../../media:/media
       - /etc/localtime:/etc/localtime:ro
     environment:
-      PUID: 1000
-      PGID: 1000
       MINIDLNA_MEDIA_DIR: /media
-      MINIDLNA_FRIENDLY_NAME: custom-nas
+      MINIDLNA_FRIENDLY_NAME: "${FRIENDLY_NAME}"

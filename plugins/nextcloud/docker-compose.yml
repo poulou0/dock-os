@@ -1,0 +1,17 @@
+version: "2.1"
+services:
+  nextcloud:
+    container_name: nextcloud
+    image: lscr.io/linuxserver/nextcloud:latest
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 4431:443
+    volumes:
+      - ./config:/config
+      - ../../media/nextcloud:/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      PUID: 1000
+      PGID: 1000
