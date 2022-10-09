@@ -16,3 +16,4 @@ services:
       PGID: 1000
       PMA_ARBITRARY: 1
       PMA_HOST: host.docker.internal
+      UPLOAD_LIMIT: 512M
