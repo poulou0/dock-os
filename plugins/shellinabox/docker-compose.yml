@@ -15,3 +15,8 @@ services:
     environment:
       SIAB_SSL: "false"
       SIAB_SERVICE: "/:SSH:host.docker.internal"
+
+networks:
+  default:
+    external:
+      name: dockEμ

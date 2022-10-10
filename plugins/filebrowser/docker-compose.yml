@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   filebrowser:
     container_name: filebrowser
@@ -11,6 +11,8 @@ services:
     volumes:
       - "./data:/data"
       - "../../media:/srv"
-    environment:
-      PUID: 1000
-      PGID: 1000
+
+networks:
+  default:
+    external:
+      name: dockEμ

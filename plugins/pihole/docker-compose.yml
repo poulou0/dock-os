@@ -17,3 +17,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       WEBPASSWORD: "${WEBPASSWORD}"
+
+networks:
+  default:
+    external:
+      name: dockEμ

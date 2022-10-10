@@ -9,3 +9,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
+networks:
+  default:
+    external:
+      name: dockEμ

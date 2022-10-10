@@ -16,3 +16,8 @@ services:
       - ./var/lib/onlyoffice:/var/lib/onlyoffice
       - ./var/lib/postgresql:/var/lib/postgresql
       - ./var/lib/rabbitmq:/var/lib/rabbitmq
+
+networks:
+  default:
+    external:
+      name: dockEμ
