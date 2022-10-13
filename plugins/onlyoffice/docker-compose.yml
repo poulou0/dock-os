@@ -16,6 +16,9 @@ services:
       - ./var/lib/onlyoffice:/var/lib/onlyoffice
       - ./var/lib/postgresql:/var/lib/postgresql
       - ./var/lib/rabbitmq:/var/lib/rabbitmq
+    environment:
+      JWT_ENABLED: "true"
+      JWT_SECRET: "${JWT_SECRET}"
 
 networks:
   default:
