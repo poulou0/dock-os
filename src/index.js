@@ -27,7 +27,7 @@ const requestListener = function (req, res) {
   }
 
   let { pathname, query } = url.parse(req.url);
-  query = query?.replaceAll('&', ' ');
+  query = decodeURI(query?.replaceAll('&', ' '));
   for (const mod of paths) {
     for (const path of Object.keys(mod)) {
       if (pathname === mod[path].pathname) {

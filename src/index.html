@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>dockOS</title>
+  <title>dockΕμ</title>
   <link href="https://bootswatch.com/5/superhero/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css" rel="stylesheet" crossorigin="anonymous">
   <link rel="stylesheet" href="dashboard.css">
@@ -148,7 +148,7 @@
           for (let j = 0; j < questions.length; ++j) {
             const answer = prompt(questions[j], answers?.[j] || '');
             if (!answer) return;
-            urlQueryArray.push(name[j] + '=' + answer);
+            urlQueryArray.push(name[j] + '=' + encodeURIComponent(answer));
           }
           urlQuery = '?' + urlQueryArray.join('&');
         }
