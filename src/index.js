@@ -27,7 +27,7 @@ const requestListener = function (req, res) {
   }
 
   let { pathname, query } = url.parse(req.url);
-  query = decodeURI(query?.replaceAll('&', ' '));
+  query = (query) ? decodeURI(query).replaceAll('&', ' ') : '';
   for (const mod of paths) {
     for (const path of Object.keys(mod)) {
       if (pathname === mod[path].pathname) {
@@ -112,6 +112,14 @@ const requestListener = function (req, res) {
       fs.promises.readFile(__dirname + "/index.html")
         .then(contents => {
           res.setHeader("Content-Type", "text/html");
+          res.writeHead(200);
+          res.end(contents);
+        })
+      break
+    case "/manifest.json":
+      fs.promises.readFile(__dirname + "/manifest.json")
+        .then(contents => {
+          res.setHeader("Content-Type", "application/json");
           res.writeHead(200);
           res.end(contents);
         })
