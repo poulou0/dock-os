@@ -7,6 +7,7 @@ const url = require("url");
 const USER = process.env.USER;
 const PASSWORD = process.env.PASSWORD;
 const ROOT_DIR = process.env.ROOT_DIR;
+const BASIC_ACCESS_AUTHENTICATION = ['true', '1'].includes(process.env.BASIC_ACCESS_AUTHENTICATION);
 const host = '0.0.0.0';
 const port = 443;
 
@@ -20,7 +21,9 @@ fs.readdirSync("../plugins/")
   });
 
 const requestListener = function (req, res) {
-  if (req.headers.authorization !== "Basic " + Buffer.from(`${USER}:${PASSWORD}`).toString("base64")) {
+  if (BASIC_ACCESS_AUTHENTICATION
+    && req.headers.authorization !== "Basic " + Buffer.from(`${USER}:${PASSWORD}`).toString("base64")
+  ) {
     res.setHeader("WWW-Authenticate", 'Basic realm="User Visible Realm"');
     res.writeHead(401);
     return res.end();
