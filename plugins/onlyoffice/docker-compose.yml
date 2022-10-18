@@ -12,7 +12,7 @@ services:
       - ./var/www/onlyoffice/Data:/var/www/onlyoffice/Data
       - ./var/lib/redis:/var/lib/redis
       - ./var/log/onlyoffice:/var/log/onlyoffice
-      - ./usr/share/fonts/truetype/custom:/usr/share/fonts/truetype/custom
+      - ../../media/onlyoffice/custom-fonts:/usr/share/fonts/truetype/custom
       - ./var/lib/onlyoffice:/var/lib/onlyoffice
       - ./var/lib/postgresql:/var/lib/postgresql
       - ./var/lib/rabbitmq:/var/lib/rabbitmq

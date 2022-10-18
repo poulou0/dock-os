@@ -16,5 +16,15 @@ module.exports = {
         "docker-compose -f " + ROOT_DIR + "/plugins/onlyoffice/docker-compose.yml down",
       ];
     }
+  },
+  generate_allfonts: {
+    pathname: "/onlyoffice-generate-allfonts",
+    commands: ({ROOT_DIR}) => {
+      return [
+        // "echo 'THIS WILL TAKE SOME TIME!! Clear all data/cookies from onlyoffice when it's done!'",
+        "docker-compose -f " + ROOT_DIR + "/plugins/onlyoffice/docker-compose.yml exec -T onlyoffice /usr/bin/documentserver-generate-allfonts.sh",
+        // "docker exec -it onlyoffice /usr/bin/documentserver-generate-allfonts.sh",
+      ];
+    }
   }
 };
