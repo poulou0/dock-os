@@ -1,5 +1,6 @@
 .env
 ui-log.txt
+media/
 plugins/*/*
 !plugins/*/docker-compose.yml
 !plugins/*/sidebar.html
