@@ -11,6 +11,14 @@ services:
     volumes:
       - "./data:/data"
       - "../../media:/srv"
+  filebrowser_setup:
+    container_name: filebrowser_setup
+    image: "filebrowser/filebrowser"
+    entrypoint: /bin/sh
+    command: -c "/filebrowser config init > /dev/null && /filebrowser users add admin ${ADMIN_PASS} --perm.admin > /dev/null && cp /database.db /data/database.db"
+    volumes:
+      - "./data:/data"
+      - "../../media:/srv"
 
 networks:
   default:
