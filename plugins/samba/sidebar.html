@@ -1,0 +1,21 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#samba-submenu">
+  <span class="plugin-status" id="samba-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  Samba share
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="samba-submenu">
+  <li class="samba-when-disabled d-none">
+    <a href="/samba-start" class="terminal-output-link" data-env-variable-name="ADMIN_PASSWORD|GUEST_PASSWORD" data-env-variable-question="Give a password for the user 'admin'|Give a password for the user 'guest'">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="samba-when-enabled d-none">
+    <a href="/samba-remove" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

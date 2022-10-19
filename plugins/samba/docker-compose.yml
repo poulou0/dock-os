@@ -1,0 +1,24 @@
+version: "2"
+services:
+  samba:
+    container_name: samba
+    image: dperson/samba
+    command: -r
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - "./run/samba:/run/samba"
+      - "./var/log/samba:/var/log/samba"
+      - "./var/cache/samba:/var/cache/samba"
+      - "../../media:/mount"
+    environment:
+      USER1: "admin;${ADMIN_PASSWORD}"
+      SHARE1: "media;/mount;yes;no;no;admin;admin;"
+      USER2: "guest;${GUEST_PASSWORD}"
+      SHARE2: "shared;/mount/shared;yes;no;no;guest;guest;"
+
+networks:
+  default:
+    external:
+      name: dockEμ
