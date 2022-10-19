@@ -1,0 +1,19 @@
+version: "2"
+services:
+  ftp:
+    container_name: ftp
+    image: delfer/alpine-ftp-server
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    volumes:
+      - "./ftp/ftp:/ftp/ftp"
+      - "../../media:/media"
+    environment:
+      USERS: "admin|${ADMIN_PASSWORD}|/media|1000|1000"
+      ADDRESS: "${HOST_ADDRESS}"
+
+networks:
+  default:
+    external:
+      name: dockEμ

@@ -1,0 +1,21 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#ftp-submenu">
+  <span class="plugin-status" id="ftp-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  FTP share
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="ftp-submenu">
+  <li class="ftp-when-disabled d-none">
+    <a href="/ftp-start" class="terminal-output-link" data-env-variable-name="HOST_ADDRESS|ADMIN_PASSWORD" data-env-variable-question="Give the host address|Give a password for the user 'admin'">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="ftp-when-enabled d-none">
+    <a href="/ftp-remove" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>
