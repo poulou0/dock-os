@@ -1,0 +1,14 @@
+version: "2"
+services:
+  raspotify:
+    container_name: raspotify
+    image: derkades/raspotify
+    network_mode: host
+    devices: [/dev/snd]
+    environment:
+      SPOTIFY_NAME: "${SPOTIFY_NAME}"
+
+networks:
+  default:
+    external:
+      name: dockEμ
