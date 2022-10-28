@@ -1,0 +1,11 @@
+version: "2"
+services:
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    restart: unless-stopped
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    network_mode: host

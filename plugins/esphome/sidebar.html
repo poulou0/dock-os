@@ -1,0 +1,27 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#esphome-submenu">
+  <span class="plugin-status" id="esphome-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  ESPHome
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="esphome-submenu">
+  <li class="esphome-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':6052', '_blank');">
+      <i class="fas fa-microchip fa-sm"></i>
+      Dashboard
+    </a>
+  </li>
+  <li class="esphome-when-disabled d-none">
+    <a href="/esphome-start" class="terminal-output-link">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="esphome-when-enabled d-none">
+    <a href="/esphome-remove" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>
