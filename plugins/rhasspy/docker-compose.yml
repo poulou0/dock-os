@@ -1,0 +1,19 @@
+version: "2"
+services:
+  rhasspy:
+    container_name: rhasspy
+    image: rhasspy/rhasspy
+    restart: unless-stopped
+    volumes:
+      - ./profiles:/profiles
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8013:12101"
+    devices:
+        - /dev/snd:/dev/snd
+    command: --user-profiles /profiles --profile en
+
+networks:
+  default:
+    external:
+      name: dockEμ
