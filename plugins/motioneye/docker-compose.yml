@@ -1,0 +1,18 @@
+version: "2"
+services:
+  motioneye:
+    container_name: motioneye
+    image: ccrisan/motioneye:master-${CPU_ARCHITECTURE}
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./motioneye:/etc/motioneye
+      - ../../media/motioneye:/var/lib/motioneye
+    ports:
+      - "8014:8765"
+
+networks:
+  default:
+    external:
+      name: dockEμ
