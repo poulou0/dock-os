@@ -7,6 +7,16 @@ module.exports = {
       ];
     }
   },
+  pull: {
+    pathname: "/minidlna-pull",
+    commands: ({ROOT_DIR}) => {
+      return [
+        "docker-compose -f " + ROOT_DIR + "/plugins/minidlna/docker-compose.yml pull",
+        "docker-compose -f " + ROOT_DIR + "/plugins/minidlna/docker-compose.yml down",
+        "docker-compose -f " + ROOT_DIR + "/plugins/minidlna/docker-compose.yml up -d",
+      ];
+    }
+  },
   disable: {
     pathname: "/minidlna-remove",
     commands: ({ROOT_DIR}) => {

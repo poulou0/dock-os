@@ -32,9 +32,11 @@
         </button>
       </div>
       <div class="col-6 d-flex justify-content-end">
-        <a href="/ui-log.txt" target="_blank"
-           class="btn btn-secondary">
+        <a href="/ui-log.txt" target="_blank" class="btn btn-secondary mx-1">
           <span class="text-nowrap">Full log</span>
+        </a>
+        <a href="/prune" class="btn btn-secondary terminal-output-link">
+          <i class="fas fa-scissors"></i>
         </a>
         <a onclick="if (confirm('Are you sure that you want to restart?')) window.location.href = '/restart'"
            class="btn btn-secondary mx-1">

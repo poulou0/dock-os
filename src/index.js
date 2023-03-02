@@ -143,6 +143,19 @@ const requestListener = function (req, res) {
           res.end(JSON.stringify({result: `${stdout}`}));
         })
       break
+    case "/prune":
+      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
+        + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
+        + 'docker image prune -f'
+        + '\\n\\n\\" >> ' + ROOT_DIR + '/ui-log.txt"');
+      exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
+        + 'sudo -S bash -c \''
+        + 'docker image prune -f'
+        + ' 2>&1\' >> ' + ROOT_DIR + '/ui-log.txt"', () => {
+        res.writeHead(302, {location: "/"});
+        res.end();
+      });
+      break
     case "/restart":
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | sudo -S bash -c \'reboot\'"');
       res.writeHead(302, {location: "/"});

@@ -9,6 +9,16 @@ module.exports = {
       ];
     }
   },
+  pull: {
+    pathname: "/onlyoffice-pull",
+    commands: ({ROOT_DIR}) => {
+      return [
+        "docker-compose -f " + ROOT_DIR + "/plugins/onlyoffice/docker-compose.yml pull",
+        "docker-compose -f " + ROOT_DIR + "/plugins/onlyoffice/docker-compose.yml down",
+        "docker-compose -f " + ROOT_DIR + "/plugins/onlyoffice/docker-compose.yml up -d",
+      ];
+    }
+  },
   disable: {
     pathname: "/onlyoffice-remove",
     commands: ({ROOT_DIR}) => {
