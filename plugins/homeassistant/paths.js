@@ -24,5 +24,20 @@ module.exports = {
         "docker-compose -f " + ROOT_DIR + "/plugins/homeassistant/docker-compose.yml down",
       ];
     }
-  }
+  },
+  install_hacs: {
+    pathname: "/homeassistant-install-hacs",
+    commands: ({ROOT_DIR}) => {
+      return [
+        "rm -rf " + ROOT_DIR + "/plugins/homeassistant/config/custom_components",
+        "mkdir " + ROOT_DIR + "/plugins/homeassistant/config/custom_components",
+        "mkdir " + ROOT_DIR + "/plugins/homeassistant/config/custom_components/hacs",
+        "wget -O " + ROOT_DIR + "/plugins/homeassistant/config/custom_components/install.zip https://github.com/hacs/integration/releases/latest/download/hacs.zip",
+        "unzip " + ROOT_DIR + "/plugins/homeassistant/config/custom_components/install.zip -d " + ROOT_DIR + "/plugins/homeassistant/config/custom_components/hacs",
+        "rm " + ROOT_DIR + "/plugins/homeassistant/config/custom_components/install.zip",
+        "docker-compose -f " + ROOT_DIR + "/plugins/homeassistant/docker-compose.yml down",
+        "docker-compose -f " + ROOT_DIR + "/plugins/homeassistant/docker-compose.yml up -d",
+      ];
+    }
+  },
 };
