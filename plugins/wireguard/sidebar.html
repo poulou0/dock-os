@@ -1,0 +1,33 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#wireguard-submenu">
+  <span class="plugin-status" id="wireguard-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  WireGuard
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="wireguard-submenu">
+  <li class="wireguard-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8015', '_blank');">
+      <i class="fas fa-dragon fa-sm"></i>
+      Open wg-manager
+    </a>
+  </li>
+  <li class="wireguard-when-disabled d-none">
+    <a href="/wireguard-start" class="terminal-output-link" data-env-variable-name="PASSWORD" data-env-variable-question="Give the admin password" data-env-variable-answer="admin">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="wireguard-when-enabled d-none">
+    <a href="/wireguard-pull" class="terminal-output-link">
+      <i class="fas fa-arrows-rotate fa-sm"></i>
+      Pull latest
+    </a>
+  </li>
+  <li class="wireguard-when-enabled d-none">
+    <a href="/wireguard-remove" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

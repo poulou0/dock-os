@@ -1,0 +1,23 @@
+version: "2.1"
+services:
+  wireguard:
+    container_name: wireguard
+    image: perara/wg-manager
+    restart: unless-stopped
+#    sysctls:
+#      net.ipv6.conf.all.disable_ipv6: 0  # Required for IPV6
+#    cap_add:
+#      - NET_ADMIN
+#    ports:
+#      - 51800-51900:51800-51900/udp
+#      - 8015:8015
+    network_mode: host
+    privileged: true
+    volumes:
+      - ./config:/config
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8015
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: ${PASSWORD}
+      WEB_CONCURRENCY: 1
