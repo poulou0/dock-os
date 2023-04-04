@@ -15,4 +15,4 @@ services:
 networks:
   default:
     external:
-      name: dockEμ
+      name: dockOS
