@@ -1,6 +1,5 @@
 const fs = require('fs');
 const {exec, spawn} = require("child_process");
-const https = require('https');
 const http = require('http');
 const url = require("url");
 
@@ -8,8 +7,6 @@ const USER = process.env.USER;
 const PASSWORD = process.env.PASSWORD;
 const ROOT_DIR = process.env.ROOT_DIR;
 const BASIC_ACCESS_AUTHENTICATION = ['true', '1'].includes(process.env.BASIC_ACCESS_AUTHENTICATION);
-const host = '0.0.0.0';
-const port = 443;
 
 let paths = [];
 fs.readdirSync("../plugins/")
@@ -54,11 +51,11 @@ const requestListener = function (req, res) {
         exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
           + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
           + (query || '') + ' ' + mod[path].commands({ROOT_DIR}).join('\\n#   && ' + (query || '') + ' ')
-          + '\\n\\n\\" >> ' + ROOT_DIR + '/ui-log.txt"');
+          + '\\n\\n\\" >> ' + ROOT_DIR + '/nodejs/ui-log.txt"');
         exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
           + 'sudo -S bash -c \''
           + (query ? query : '') + ' ' + mod[path].commands({ROOT_DIR}).join(' && ' + (query ? query : '') + ' ')
-          + ' 2>&1\' >> ' + ROOT_DIR + '/ui-log.txt"', () => {
+          + ' 2>&1\' >> ' + ROOT_DIR + '/nodejs/ui-log.txt"', () => {
           res.writeHead(302, {location: "/"});
           res.end();
         });
@@ -147,11 +144,11 @@ const requestListener = function (req, res) {
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
         + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
         + 'docker image prune -f'
-        + '\\n\\n\\" >> ' + ROOT_DIR + '/ui-log.txt"');
+        + '\\n\\n\\" >> ' + ROOT_DIR + '/nodejs/ui-log.txt"');
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
         + 'sudo -S bash -c \''
         + 'docker image prune -f'
-        + ' 2>&1\' >> ' + ROOT_DIR + '/ui-log.txt"', () => {
+        + ' 2>&1\' >> ' + ROOT_DIR + '/nodejs/ui-log.txt"', () => {
         res.writeHead(302, {location: "/"});
         res.end();
       });
@@ -168,7 +165,7 @@ const requestListener = function (req, res) {
       break
     case "/ui-log.txt/tail":
       res.setHeader("Content-Type", "text/plain");
-      exec('tail ../ui-log.txt',
+      exec('tail ui-log.txt',
         (error, stdout, stderr) => {
           if (error) return console.error(`exec error: ${error}`);
           res.end(stdout);
@@ -176,22 +173,12 @@ const requestListener = function (req, res) {
       break
     case "/ui-log.txt":
       res.setHeader("Content-Type", "text/plain");
-      const buffer = fs.readFileSync("../ui-log.txt");
+      const buffer = fs.readFileSync("ui-log.txt");
       res.end(buffer.toString());
       break
   }
 }
 
-https
-  .createServer({key: fs.readFileSync('cert/self-signed.key'), cert: fs.readFileSync('cert/self-signed.crt')}, requestListener)
-  .listen(port, host, () => {
-    console.log(`Server is running on https://${host}:${port}`);
-  });
-
-// https://newbedev.com/automatic-https-connection-redirect-with-node-js-express
 http
-  .createServer(function (req, res) {
-    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-    res.end();
-  })
+  .createServer(requestListener)
   .listen(80);

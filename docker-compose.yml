@@ -2,22 +2,32 @@ version: "3.5"
 services:
   nodejs:
     container_name: dashboard
-    build: .
+    build: nodejs/
     restart: unless-stopped
     networks:
       - dockOS
+    ports:
+      - "8888:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     env_file:
       - .env
-    ports:
-      - "443:443"
-      - "80:80"
     volumes:
       - ".:/app"
       - "./media:/media"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    working_dir: /app/src
+    working_dir: /app/nodejs
     command: node index.js
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ".:/app"
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+    depends_on:
+      - nodejs
 
 networks:
   dockOS:

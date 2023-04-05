@@ -17,6 +17,7 @@ Almost zero-configuration deployments of docker containers useful in a home serv
 * MiniDLNA https://hub.docker.com/r/vladgh/minidlna
 * MotionEye https://hub.docker.com/r/ccrisan/motioneye
 * Nextcloud https://hub.docker.com/r/linuxserver/nextcloud
+* Nginx https://hub.docker.com/_/nginx
 * ONLYOFFICE https://hub.docker.com/r/onlyoffice/documentserver
 * phpMyAdmin https://hub.docker.com/r/linuxserver/phpmyadmin
 * Pi-hole https://hub.docker.com/r/pihole/pihole
@@ -41,6 +42,8 @@ cp ./dock-os/.env.dist ./dock-os/.env && \
 echo "Give the username of a sudoer" && read && sed -i "s/USER=.*/USER=$REPLY/g" ./dock-os/.env && \
 echo "Give the password of the sudoer" && read -s && sed -i "s/PASSWORD=.*/PASSWORD=$REPLY/g" ./dock-os/.env && \
 sed -i "s|ROOT_DIR=.*|ROOT_DIR=$PWD\/dock-os|g" ./dock-os/.env && \
+mkdir ./dock-os/nginx/certs && openssl req -newkey rsa:2048 -nodes -x509 -days 3650 -subj "/C=GR" \
+  -keyout ./dock-os/nginx/certs/dashboard.key -out ./dock-os/nginx/certs/dashboard.crt && \
 sudo docker-compose -f ./dock-os/docker-compose.yml up -d
 ```
 
@@ -80,5 +83,4 @@ sudo docker-compose -f ./dock-os/docker-compose.yml up -d
 
 ### TODO
 
-* generate self-signed certs on installation
 * Make a 'purge config' button for every entry when its stopped (and/or system prune -a --volumes https://docs.docker.com/engine/reference/commandline/system_prune/)
