@@ -1,7 +1,6 @@
-FROM node:buster-slim
+FROM node:current-alpine
 
-RUN apt update \
-  && apt -y --no-install-recommends install ssh sshpass
+RUN apk add --update --no-cache openssh sshpass
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
