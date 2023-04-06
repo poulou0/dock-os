@@ -8,11 +8,13 @@ services:
       - "8003:8443"
     volumes:
       - ./config:/config
-      - ../../media/:/media
+      - ../../:/dock-os
       - /etc/localtime:/etc/localtime:ro
     environment:
       PUID: 1000
       PGID: 1000
+      DEFAULT_WORKSPACE: /dock-os
+      PASSWORD: ${PASSWORD}
 
 networks:
   default:

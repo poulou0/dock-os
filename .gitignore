@@ -1,3 +1,4 @@
+.idea
 .env
 nginx/certs/
 nodejs/ui-log.txt
