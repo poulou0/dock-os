@@ -84,6 +84,8 @@
         crossorigin="anonymous"></script>
 <script src="footer-plugins.js"></script>
 <script>
+  //title
+  document.title += " - " + window.location.hostname;
   // sidebar
   const dismissHandler = () => {
     if (document.querySelector('.terminal-output').offsetParent === null) {
