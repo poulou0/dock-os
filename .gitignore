@@ -4,6 +4,7 @@ nginx/certs/
 nodejs/ui-log.txt
 media/
 plugins/*/*
+certbot/
 !plugins/*/docker-compose.yml
 !plugins/*/sidebar.html
 !plugins/*/footer.js

@@ -5,6 +5,7 @@ The main beam, especially in a house
 ```
 Almost zero-configuration deployments of docker containers useful in a home server.
 
+* Certbot (Let's Encrypt) https://hub.docker.com/r/certbot/certbot
 * Duplicati https://hub.docker.com/r/linuxserver/duplicati
 * ESPHome https://hub.docker.com/r/esphome/esphome
 * File Browser https://hub.docker.com/r/filebrowser/filebrowser
@@ -79,6 +80,18 @@ sudo docker-compose -f ./dock-os/docker-compose.yml up -d
   curl http://<ip>:8200/ContentDir.xml -H 'SOAPAction:urn:schemas-upnp-org:service:ContentDirectory:1#Browse' --data '<ObjectID>2$8</ObjectID><BrowseFlag>BrowseDirectChildren</BrowseFlag>'
   ```
   Source: https://developer.sony.com/develop/audio-control-api/get-started/browse-dlna-file
+
+  ### certbot
+
+  Example issuing:
+  ```shell
+  docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ [--dry-run] -d sub1.domain1.com,sub2.domain1.com,sub.domain2.com
+  ```
+  Renew:
+  ```shell
+  docker-compose run --rm certbot renew
+  ```
+  More on `./nginx/conf.d/README.md`
 </details>
 
 ### TODO
