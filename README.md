@@ -30,13 +30,13 @@ Almost zero-configuration deployments of docker containers useful in a home serv
 * shellinabox https://hub.docker.com/r/sspreitzer/shellinabox
 * Transmission https://hub.docker.com/r/linuxserver/transmission
 * VS Code https://hub.docker.com/r/linuxserver/code-server
-* WireGuard manager https://hub.docker.com/r/perara/wg-manager
+* WireGuard Easy https://hub.docker.com/r/weejewel/wg-easy
 
 ![dock-os.png](./dock-os.png)
 
 ### Installation
 ```shell
-cd ~ && \
+cd ~ && sudo apt update && \
 sudo apt install -y ssh git docker-compose openssl && \
 git clone https://github.com/poulou0/dock-os.git && \
 cp ./dock-os/.env.dist ./dock-os/.env && \

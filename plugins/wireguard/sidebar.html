@@ -7,19 +7,19 @@
 </a>
 <ul class="collapse list-unstyled" id="wireguard-submenu">
   <li class="wireguard-when-enabled d-none">
-    <a onclick="window.open('http://' + window.location.hostname + ':8015', '_blank');">
+    <a onclick="window.open('http://' + window.location.hostname + ':51821', '_blank');">
       <i class="fas fa-dragon fa-sm"></i>
-      Open wg-manager
+      Open wg-easy
     </a>
   </li>
   <li class="wireguard-when-disabled d-none">
-    <a href="/wireguard-start" class="terminal-output-link" data-env-variable-name="PASSWORD" data-env-variable-question="Give the admin password" data-env-variable-answer="admin">
+    <a href="/wireguard-start" class="terminal-output-link" data-env-variable-name="WG_HOST|PASSWORD|WG_DEFAULT_ADDRESS" data-env-variable-question="Give the hostname (public ip or public domain name)|Give the admin password|Give the default address range (if not sure, leave it '10.8.0.x')" data-env-variable-answer="your.public.ip.here|admin|10.8.0.x">
       <i class="fas fa-play fa-sm"></i>
       Start
     </a>
   </li>
   <li class="wireguard-when-enabled d-none">
-    <a href="/wireguard-pull" class="terminal-output-link">
+    <a href="/wireguard-pull" class="terminal-output-link" data-env-variable-name="WG_HOST|PASSWORD|WG_DEFAULT_ADDRESS" data-env-variable-question="Give the hostname (public ip or public domain name)|Give the admin password|Give the default address range (if not sure, leave it '10.8.0.x')" data-env-variable-answer="your.public.ip.here|admin|10.8.0.x">
       <i class="fas fa-arrows-rotate fa-sm"></i>
       Pull latest
     </a>
