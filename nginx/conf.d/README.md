@@ -29,7 +29,7 @@ server {
     
     location /.well-known/acme-challenge/ {
         default_type "text/plain";
-        root /app/certbot/www/;
+        root /app/plugins/certbot/certbot/www/;
     }
 
     location / {
@@ -40,8 +40,8 @@ server {
     listen 443 ssl;
     server_name example.com;
 
-    # ssl_certificate /app/certbot/conf/live/example.com/fullchain.pem;
-    # ssl_certificate_key /app/certbot/conf/live/example.com/privkey.pem;
+    # ssl_certificate /app/plugins/certbot/certbot/conf/live/example.com/fullchain.pem;
+    # ssl_certificate_key /app/plugins/certbot/certbot/conf/live/example.com/privkey.pem;
 
     location / {
         proxy_pass https://0.0.0.0:4430/;

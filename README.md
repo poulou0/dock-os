@@ -85,11 +85,11 @@ sudo docker-compose -f ./dock-os/docker-compose.yml up -d
 
   Example issuing:
   ```shell
-  docker-compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ [--dry-run] -d sub1.domain1.com,sub2.domain1.com,sub.domain2.com
+  docker-compose -f ./dock-os/plugins/certbot/docker-compose.yml run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ [--dry-run] -d sub1.domain1.com,sub2.domain1.com,sub.domain2.com
   ```
   Renew:
   ```shell
-  docker-compose run --rm certbot renew
+  docker-compose -f ./dock-os/plugins/certbot/docker-compose.yml run --rm certbot renew
   ```
   More on `./nginx/conf.d/README.md`
 </details>
