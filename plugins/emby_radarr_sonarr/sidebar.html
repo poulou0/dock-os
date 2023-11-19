@@ -1,0 +1,45 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#emby-submenu">
+  <span class="plugin-status" id="emby-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  Emby + Radarr + Sonarr
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="emby-submenu">
+  <li class="emby-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8015', '_blank');">
+      <i class="fas fa-circle-play fa-sm"></i>
+      Emby
+    </a>
+  </li>
+  <li class="emby-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8016', '_blank');">
+      <i class="fas fa-play fa-sm"></i>
+      Radarr
+    </a>
+  </li>
+  <li class="emby-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8016', '_blank');">
+      <i class="fas fa-location-crosshairs fa-sm"></i>
+      Sonarr
+    </a>
+  </li>
+  <li class="emby-when-disabled d-none">
+    <a href="/emby-start" class="terminal-output-link">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="emby-when-enabled d-none">
+    <a href="/emby-pull" class="terminal-output-link">
+      <i class="fas fa-arrows-rotate fa-sm"></i>
+      Pull latest
+    </a>
+  </li>
+  <li class="emby-when-enabled d-none">
+    <a href="/emby-remove?HOSTIP=0.0.0.0" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>
