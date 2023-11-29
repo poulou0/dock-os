@@ -10,8 +10,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ./emby:/config
-      - ../../media/tv:/data/tvshows
-      - ../../media/movies:/data/movies
+      - ../../media:/media
     ports:
       - 8015:8096
     restart: unless-stopped
@@ -24,8 +23,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ./radarr:/config
-      - ../../media/movies:/movies
-      - ../../media/torrents:/downloads
+      - ../../media:/media
     ports:
       - 8016:7878
     restart: unless-stopped
@@ -38,8 +36,7 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ./sonarr:/config
-      - ../../media/tv:/tv
-      - ../../media/torrents:/downloads
+      - ../../media:/media
     ports:
       - 8017:8989
     restart: unless-stopped
