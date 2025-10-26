@@ -189,6 +189,7 @@ const requestListener = (req, res) => {
   }
 }
 
-http
-  .createServer(requestListener)
-  .listen(80);
+const server = http.createServer(requestListener);
+server.timeout = 0;
+server.requestTimeout = 0;
+server.listen(80);
