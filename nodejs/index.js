@@ -1,23 +1,25 @@
 const fs = require('fs');
 const {exec, spawn} = require("child_process");
 const http = require('http');
-const url = require("url");
 
 const USER = process.env.USER;
 const PASSWORD = process.env.PASSWORD;
 const ROOT_DIR = process.env.ROOT_DIR;
 const BASIC_ACCESS_AUTHENTICATION = ['true', '1'].includes(process.env.BASIC_ACCESS_AUTHENTICATION);
 
-let paths = [];
-fs.readdirSync("../plugins/")
-  .map((v) => "../plugins/" + v)
-  .map((f) => fs.existsSync(f + "/paths.js") ? f + "/paths.js" : "")
-  .filter((f) => f.length)
-  .forEach((file) => {
-    paths.push(require(file));
-  });
+// paths looks like: [
+//   { pathname: '/duplicati-start', commands: [Function: commands] },
+//   { pathname: '/emby-start', commands: [Function: commands] },
+//   { pathname: '/esphome-remove', commands: [Function: commands] },
+//   ...
+// ]
+const paths = fs.readdirSync("../plugins/")
+  .map((f) => `../plugins/${f}/paths.js`)
+  .filter((f) => fs.existsSync(f))
+  .map((f) => require(f))
+  .flatMap((obj) => Object.values(obj));
 
-const requestListener = function (req, res) {
+const requestListener = (req, res) => {
   if (BASIC_ACCESS_AUTHENTICATION
     && req.headers.authorization !== "Basic " + Buffer.from(`${USER}:${PASSWORD}`).toString("base64")
   ) {
@@ -26,40 +28,45 @@ const requestListener = function (req, res) {
     return res.end();
   }
 
-  let { pathname, query } = url.parse(req.url);
-  query = (query) ? decodeURI(query).replaceAll('&', ' ') : '';
-  for (const mod of paths) {
-    for (const path of Object.keys(mod)) {
-      if (pathname === mod[path].pathname) {
-        // var child = spawn('sshpass', [
-        //   '-p', PASSWORD,
-        //   'ssh', USER + '@host.docker.internal',
-        //   '-o', 'StrictHostKeyChecking=no',
-        //   '"\"echo ' + PASSWORD + ' | sudo -S bash -c \'' +
-        //     (query || '') + ' ' + mod[path].commands({ROOT_DIR}).join(' && ' + (query || '') + ' ') +
-        //   ' 2>&1\' >> '+ROOT_DIR+'/last-output.txt\""',
-        // ]);
-        // child.stdout.setEncoding('utf8');
-        // child.stdout.on('data', (data) => {
-        //   console.log(data.toString());
-        //   fs.appendFile('./last-output.txt', data.toString());
-        // });
-        // child.stdout.on('close', function() {
-        //   res.writeHead(302, {location: "/"});
-        //   res.end();
-        // });
-        exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
-          + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
-          + (query || '') + ' ' + mod[path].commands({ROOT_DIR}).join('\\n#   && ' + (query || '') + ' ')
-          + '\\n\\n\\" >> ' + ROOT_DIR + '/nodejs/ui-log.txt"');
-        exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
-          + 'sudo -S bash -c \''
-          + (query ? query : '') + ' ' + mod[path].commands({ROOT_DIR}).join(' && ' + (query ? query : '') + ' ')
-          + ' 2>&1\' >> ' + ROOT_DIR + '/nodejs/ui-log.txt"', () => {
-          res.writeHead(302, {location: "/"});
-          res.end();
-        });
-      }
+  const { pathname, searchParams } = new URL(req.url, `https://${req.headers.host}`);
+  const ENV_VARS = Array.from(searchParams.entries()).map((param) => `${param[0]}=${param[1]}`).join(" ");
+
+  for (const path of paths) {
+    if (pathname === path.pathname) {
+      var child = spawn(`sshpass -p ${PASSWORD} ssh host.docker.internal -l ${USER} -oStrictHostKeyChecking=accept-new "echo ${PASSWORD} | sudo -S bash -c '
+        ${ENV_VARS} ${path.commands({ROOT_DIR}).join(` && ${ENV_VARS} `)}
+      '"`, { shell: true });
+      child.stdout.setEncoding('utf8');
+      child.stdout.on('data', (data) => {
+        fs.writeFileSync('./ui-log.txt', `# ${(new Date()).toISOString()}\n# ${ENV_VARS} ${path.commands({ROOT_DIR}).join(`\\n#   && ${ENV_VARS} `)}\n\n` + data.toString());
+      });
+      child.stderr.on('data', (data) => {
+        fs.writeFileSync('./ui-log.txt', `# ${(new Date()).toISOString()}\n# ${ENV_VARS} ${path.commands({ROOT_DIR}).join(`\\n#   && ${ENV_VARS} `)}\n\n` + data.toString());
+      });
+      child.on('close', (code) => {
+        fs.appendFileSync('./ui-log.txt', `\nProcess exited with code ${code}\n`);
+        res.writeHead(302, {location: "/"});
+        res.end();
+      });
+      
+      // // Write the command to the log
+      // exec(`sshpass -p ${PASSWORD} ssh host.docker.internal -l ${USER} -oStrictHostKeyChecking=accept-new "printf \\"`
+      //   + '\\n\\n###########################\\n'
+      //   + `# ${(new Date()).toISOString()}\\n`
+      //   + '# Running commands:\\n'
+      //   + `#  ${ENV_VARS} ${path.commands({ROOT_DIR}).join(`\\n#   && ${ENV_VARS} `)}\\n`
+      //   + `\\" >> ${ROOT_DIR}/nodejs/ui-log.txt"`
+      // );
+
+      // // Write the output of the command to the log
+      // exec(`sshpass -p ${PASSWORD} ssh host.docker.internal -l ${USER} -oStrictHostKeyChecking=accept-new "echo ${PASSWORD} | sudo -S bash -c '
+      //   ${ENV_VARS} ${path.commands({ROOT_DIR}).join(` && ${ENV_VARS} `)} 2>&1
+      // ' >> ${ROOT_DIR}/nodejs/ui-log.txt"`, () => {
+      //   res.writeHead(302, { location: "/" });
+      //   res.end();
+      // });
+
+      return; // if the pathname is found in the plugins, we don't have to check in the switch below
     }
   }
 
@@ -83,8 +90,9 @@ const requestListener = function (req, res) {
       break
     case "/sidebar.html":
       const sidebar_html_files = fs.readdirSync("../plugins/")
-        .map((v) => "../plugins/" + v)
-        .map((f)=> fs.existsSync(f + "/sidebar.html") ? "<li>" + fs.readFileSync(f+ "/sidebar.html") + "</li>" : "")
+        .map((f) => `../plugins/${f}/sidebar.html`)
+        .filter((f)=> fs.existsSync(f))
+        .map((f)=> `<li>${fs.readFileSync(f)}</li>`)
         .join("");
       res.setHeader("Content-Type", "text/html");
       res.writeHead(200);
@@ -92,8 +100,9 @@ const requestListener = function (req, res) {
       break
     case "/widgets.html":
       const widgets_html_files = fs.readdirSync("../plugins/")
-        .map((v) => "../plugins/" + v)
-        .map((f)=> fs.existsSync(f + "/widgets.html") ? fs.readFileSync(f+ "/widgets.html") : "")
+        .map((f) => `../plugins/${f}/widgets.html`)
+        .filter((f)=> fs.existsSync(f))
+        .map((f)=> fs.readFileSync(f))
         .join("");
       res.setHeader("Content-Type", "text/html");
       res.writeHead(200);
@@ -101,8 +110,9 @@ const requestListener = function (req, res) {
       break
     case "/footer-plugins.js":
       const footer_js_files = fs.readdirSync("../plugins/")
-        .map((v) => "../plugins/" + v)
-        .map((f)=> fs.existsSync(f + "/footer.js") ? fs.readFileSync(f+ "/footer.js") : "")
+        .map((f) => `../plugins/${f}/footer.js`)
+        .filter((f)=> fs.existsSync(f))
+        .map((f)=> fs.readFileSync(f))
         .join("");
       res.setHeader("Content-Type", "text/javascript");
       res.writeHead(200);
@@ -143,11 +153,11 @@ const requestListener = function (req, res) {
     case "/prune":
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "printf '
         + '\\"\\n\\n###########################\\n# ' + (new Date()).toISOString() + '\\n# Running commands:\\n#   '
-        + 'docker image prune -f'
+        + 'docker system prune --all --force'
         + '\\n\\n\\" >> ' + ROOT_DIR + '/nodejs/ui-log.txt"');
       exec('sshpass -p ' + PASSWORD + ' ssh host.docker.internal -l ' + USER + ' -oStrictHostKeyChecking=accept-new "echo ' + PASSWORD + ' | '
         + 'sudo -S bash -c \''
-        + 'docker image prune -f'
+        + 'docker system prune --all --force'
         + ' 2>&1\' >> ' + ROOT_DIR + '/nodejs/ui-log.txt"', () => {
         res.writeHead(302, {location: "/"});
         res.end();
@@ -163,14 +173,14 @@ const requestListener = function (req, res) {
       res.writeHead(302, {location: "/"});
       res.end();
       break
-    case "/ui-log.txt/tail":
-      res.setHeader("Content-Type", "text/plain");
-      exec('tail ui-log.txt',
-        (error, stdout, stderr) => {
-          if (error) return console.error(`exec error: ${error}`);
-          res.end(stdout);
-        })
-      break
+    // case "/ui-log.txt/tail":
+    //   res.setHeader("Content-Type", "text/plain");
+    //   exec('tail ui-log.txt',
+    //     (error, stdout, stderr) => {
+    //       if (error) return console.error(`exec error: ${error}`);
+    //       res.end(stdout);
+    //     })
+    //   break
     case "/ui-log.txt":
       res.setHeader("Content-Type", "text/plain");
       const buffer = fs.readFileSync("ui-log.txt");

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="manifest" href="manifest.json">
@@ -10,172 +11,171 @@
   <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css" rel="stylesheet" crossorigin="anonymous">
   <link rel="stylesheet" href="dashboard.css">
 </head>
-<body>
-<nav id="sidebar">
-  <div id="dismiss">
-    <i class="fas fa-arrow-left"></i>
-  </div>
-  <div class="sidebar-header">
-    <h3>Plugins</h3>
-    <p>Manage all available plugins.</p>
-  </div>
-  <ul class="list-unstyled components">
-  </ul>
-</nav>
-<div id="content">
-  <div class="container">
-    <nav class="row align-items-center navbar navbar-dark bg-dark">
-      <div class="col-6">
-        <button type="button" id="sidebarCollapse" class="btn btn-primary ">
-          <i class="fas fa-bars"></i>
-          &nbsp;&nbsp;Plugins
-        </button>
-      </div>
-      <div class="col-6 d-flex justify-content-end">
-        <a href="/ui-log.txt" target="_blank" class="btn btn-secondary mx-1">
-          <span class="text-nowrap">Full log</span>
-        </a>
-        <a href="/prune" class="btn btn-secondary terminal-output-link">
-          <i class="fas fa-scissors"></i>
-        </a>
-        <a onclick="if (confirm('Are you sure that you want to restart?')) window.location.href = '/restart'"
-           class="btn btn-secondary mx-1">
-          <i class="fas fa-arrow-rotate-left"></i>
-        </a>
-        <a onclick="if (confirm('Are you sure that you want to shutdown?')) window.location.href = '/shutdown'"
-           class="btn btn-secondary">
-          <i class="fas fa-power-off"></i>
-        </a>
-      </div>
-    </nav>
-    <div id="widgets" class="row justify-content-start">
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-6 mt-2">
-        <div class="form-floating">
-          <textarea readonly class="form-control" id="df-h"></textarea>
-          <label for="df-h">Disk usage</label>
-        </div>
-      </div>
-      <div class="col-12 col-lg-6 mt-2">
-        <div class="form-floating ">
-          <textarea readonly class="form-control" id="docker-ps"></textarea>
-          <label for="docker-ps">Docker containers</label>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="overlay"></div>
-<div class="terminal-output">
-  <pre></pre>
-  <a class="btn btn-secondary close">
-    Close
-  </a>
-  <a href="/ui-log.txt" target="_blank" class="btn btn-secondary">
-    Full log
-  </a>
-  <a href="javascript: location.reload()" class="btn btn-primary">
-    Reload
-  </a>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-<script src="footer-plugins.js"></script>
-<script>
-  //title
-  document.title += " - " + window.location.hostname;
-  // sidebar
-  const dismissHandler = () => {
-    if (document.querySelector('.terminal-output').offsetParent === null) {
-      document.querySelector("#sidebar").classList.remove("active");
-      document.querySelector(".overlay").classList.remove("active");
-    }
-  }
-  document.querySelector("#dismiss").addEventListener("click", dismissHandler);
-  document.querySelector(".overlay").addEventListener("click", dismissHandler);
-  document.querySelector("#sidebarCollapse").addEventListener("click", () => {
-    document.querySelector("#sidebar").classList.add("active");
-    document.querySelector(".overlay").classList.add("active");
-  });
-  document.querySelector('.terminal-output .close').addEventListener("click", () => {
-    document.querySelector('.terminal-output').style.display = 'none';
-  })
-  Promise.all([
-    fetch(location.href + 'sidebar.html', {method: 'get'})
-      .then((response) => response.text())
-      .then(function (response) {
-        document.querySelector("#sidebar > ul").innerHTML = response;
-      })
-      .catch(function (err) {
-        console.error(err);
-      }),
-    fetch(location.href + 'widgets.html', {method: 'get'})
-      .then((response) => response.text())
-      .then(function (response) {
-        document.querySelector("#widgets").innerHTML = response;
-      })
-      .catch(function (err) {
-        console.error(err);
-      }),
-    fetch(location.href + 'df-h', {method: 'get'})
-      .then(response => response.json())
-      .then(function (response) {
-        document.querySelector("#df-h").innerHTML = response.result;
-      })
-      .catch(function (err) {
-        console.error(err);
-      }),
-  ]).then(() => {
-    fetch(location.href + 'docker-ps', {method: 'get'})
-      .then(response => response.json())
-      .then(function (response) {
-        const textareaDockerPs = document.querySelector("#docker-ps");
-        textareaDockerPs.innerHTML = response.result;
-        textareaDockerPs.style.height = (textareaDockerPs.scrollHeight + 5) + 'px';
-        textareaDockerPs.dispatchEvent(new CustomEvent('docker-ps', {detail: response.result}));
-      })
-      .catch(function (err) {
-        console.error(err);
-      });
 
-    const terminalOutputLinks = document.querySelectorAll('.terminal-output-link');
-    for (let i = 0; i < terminalOutputLinks.length; ++i) {
-      terminalOutputLinks[i].addEventListener('click', (e) => {
-        e.preventDefault();
-        let urlQuery = '';
-        if (terminalOutputLinks[i].getAttribute('data-env-variable-name') && terminalOutputLinks[i].getAttribute('data-env-variable-question')) {
-          const name =terminalOutputLinks[i].getAttribute('data-env-variable-name')?.split('|');
-          const questions = terminalOutputLinks[i].getAttribute('data-env-variable-question')?.split('|');
-          const answers = terminalOutputLinks[i].getAttribute('data-env-variable-answer')?.split('|');
-          const urlQueryArray = [];
-          for (let j = 0; j < questions.length; ++j) {
-            const answer = prompt(questions[j], answers?.[j] || '');
-            if (!answer) return;
-            urlQueryArray.push(name[j] + '=' + encodeURIComponent(answer));
-          }
-          urlQuery = '?' + urlQueryArray.join('&');
-        }
-        const terminalOutput = document.querySelector('.terminal-output');
-        terminalOutput.style.display = 'flex';
-        const terminalOutputButtons = terminalOutput.querySelectorAll('a');
-        for (let j = 0; j < terminalOutputButtons.length; ++j) terminalOutputButtons[j].style.display = 'none';
-        const requestLog = () => fetch('/ui-log.txt/tail', {method: 'get'})
-            .then(async (data) => terminalOutput.querySelector('pre').textContent = (await data.text())
-              .replaceAll('[1A', "").replaceAll('[1B', "").replaceAll('[2K', "").replaceAll('[0m', "\n").replaceAll('[32m', "")
-            );
-        setTimeout(requestLog, 500);
-        const terminalOutputInterval = setInterval(requestLog, 1000);
-        fetch(terminalOutputLinks[i].getAttribute('href') + urlQuery, {method: 'GET'})
-          .finally(() => {
-            for (let j = 0; j < terminalOutputButtons.length; ++j) terminalOutputButtons[j].style.display = 'block';
-            clearInterval(terminalOutputInterval);
-            setTimeout(requestLog, 500);
-          });
-      });
+<body>
+  <nav id="sidebar">
+    <div id="dismiss">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="sidebar-header">
+      <h3>Plugins</h3>
+      <p>Manage all available plugins.</p>
+    </div>
+    <ul class="list-unstyled components">
+    </ul>
+  </nav>
+  <div id="content">
+    <div class="container">
+      <nav class="row align-items-center navbar navbar-dark bg-dark">
+        <div class="col-6">
+          <button type="button" id="sidebarTrigger" class="btn btn-primary ">
+            <i class="fas fa-bars"></i>
+            &nbsp;&nbsp;Plugins
+          </button>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+          <a href="/ui-log.txt" target="_blank" class="btn btn-secondary mx-1">
+            <span class="text-nowrap">Full log</span>
+          </a>
+          <a href="/prune" class="btn btn-secondary terminal-output-link">
+            <i class="fas fa-scissors"></i>
+          </a>
+          <a onclick="if (confirm('Are you sure that you want to restart?')) window.location.href = '/restart'"
+            class="btn btn-secondary mx-1">
+            <i class="fas fa-arrow-rotate-left"></i>
+          </a>
+          <a onclick="if (confirm('Are you sure that you want to shutdown?')) window.location.href = '/shutdown'"
+            class="btn btn-secondary">
+            <i class="fas fa-power-off"></i>
+          </a>
+        </div>
+      </nav>
+      <div id="widgets" class="row justify-content-start">
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-6 mt-2">
+          <div class="form-floating">
+            <textarea readonly class="form-control" id="df-h"></textarea>
+            <label for="df-h">Disk usage</label>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 mt-2">
+          <div class="form-floating ">
+            <textarea readonly class="form-control" id="docker-ps"></textarea>
+            <label for="docker-ps">Docker containers</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="overlay"></div>
+  <div class="terminal-output">
+    <pre></pre>
+    <a class="btn btn-secondary close">
+      Close
+    </a>
+    <a href="/ui-log.txt" target="_blank" class="btn btn-secondary">
+      Full log
+    </a>
+    <a href="javascript: location.reload()" class="btn btn-primary">
+      Reload
+    </a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="footer-plugins.js"></script>
+  <script>
+    document.title += " - " + window.location.hostname;
+    // Sidebar trigger button
+    document.querySelector("#sidebarTrigger").addEventListener("click", () => {
+      document.querySelector("#sidebar").classList.add("active");
+      document.querySelector(".overlay").classList.add("active");
+    });
+    // Sidebar close handler
+    const dismissHandler = () => {
+      // If the terminal is not visible then close the sidebar
+      if (document.querySelector('.terminal-output').offsetParent === null) {
+        document.querySelector("#sidebar").classList.remove("active");
+        document.querySelector(".overlay").classList.remove("active");
+      }
     }
-  });
-</script>
+    document.querySelector("#dismiss").addEventListener("click", dismissHandler);
+    document.querySelector(".overlay").addEventListener("click", dismissHandler);
+    // Hide the terminal buttons after clicking "Close"
+    document.querySelector('.terminal-output .close').addEventListener("click", () => {
+      document.querySelector('.terminal-output').style.display = 'none';
+    })
+    // First we populate the ui
+    Promise.all([
+      fetch(location.href + 'sidebar.html')
+        .then(async (response) => { document.querySelector("#sidebar > ul").innerHTML = await response.text() }),
+      fetch(location.href + 'widgets.html')
+        .then(async (response) => { document.querySelector("#widgets").innerHTML = await response.text() }),
+      fetch(location.href + 'df-h')
+        .then(async (response) => { document.querySelector("#df-h").innerHTML = (await response.json()).result }),
+      fetch(location.href + 'docker-ps')
+        .then(async (response) => (await response.json()).result)
+        .then((result) => {
+          const textareaDockerPs = document.querySelector("#docker-ps");
+          textareaDockerPs.innerHTML = result;
+          textareaDockerPs.style.height = (textareaDockerPs.scrollHeight + 5) + 'px';
+          textareaDockerPs.dispatchEvent(new CustomEvent('docker-ps', { detail: result }));
+        })
+        .catch(function (err) {
+          console.error(err);
+        }),
+    ])
+      .then(() => {
+
+        //////////////////////////////////// TODO: instead of so many listeners we can make one that checks what is clicked,
+        // ////////////////////////////////////////////  make sure it triggers even after updating dom with the promises above ////////////////////////////////////
+
+
+        // Links that have the class 'terminal-output-link'
+        for (const terminalOutputLink of document.querySelectorAll('.terminal-output-link')) {
+          terminalOutputLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            let urlQuery = '';
+            // Ask the user and add query params
+            const names = terminalOutputLink.getAttribute('data-env-variable-name')?.split('|');
+            const questions = terminalOutputLink.getAttribute('data-env-variable-question')?.split('|');
+            const answers = terminalOutputLink.getAttribute('data-env-variable-answer')?.split('|');
+            if (names && questions) {
+              const urlQueryArray = names.map((name, i) => {
+                const answer = prompt(questions[i], answers?.[i]);
+                if (!answer) return;
+                return `${name}=${encodeURIComponent(answer)}`;
+              });
+              urlQuery = `?${urlQueryArray.join('&')}`;
+            }
+
+            // Show the terminal with all the buttons hidden
+            const terminalOutput = document.querySelector('.terminal-output');
+            terminalOutput.style.display = 'flex';
+            for (let terminalOutputButton of terminalOutput.querySelectorAll('a')) terminalOutputButton.style.display = 'none';
+
+            // Read the log.txt last lines and show them in the UI
+            const requestLog = async () => {
+              const data = await fetch('/ui-log.txt');
+              terminalOutput.querySelector('pre').textContent = (await data.text())
+                .replaceAll('[0m', "\n")
+                .replace(/\[1A|\[1B|\[2K|\[32m/g, "") // delete '[1A' or '[1B' etc
+            }
+            setTimeout(requestLog, 500);
+            const terminalOutputInterval = setInterval(requestLog, 1000);
+            fetch(terminalOutputLink.getAttribute('href') + urlQuery)
+              // even if there is an exception we want to show the buttons and clear the interval
+              .finally(() => {
+                for (let terminalOutputButton of terminalOutput.querySelectorAll('a')) terminalOutputButton.style.display = 'block';
+                clearInterval(terminalOutputInterval);
+                setTimeout(requestLog, 500);
+              });
+          });
+        }
+      })
+      .catch((err) => console.error(err));
+  </script>
 </body>
+
 </html>
