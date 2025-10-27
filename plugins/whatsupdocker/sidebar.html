@@ -1,0 +1,34 @@
+<a class="collapsed" data-bs-toggle="collapse" data-bs-target="#whatsupdocker-submenu">
+  <span class="plugin-status" id="whatsupdocker-status">
+    <i class="fas fa-circle fa-xs"></i>
+  </span>
+  What's up Docker?
+  <i class="fas fa-chevron-up float-end"></i>
+</a>
+<ul class="collapse list-unstyled" id="whatsupdocker-submenu">
+  <li class="whatsupdocker-when-enabled d-none">
+    <a onclick="window.open('http://' + window.location.hostname + ':8018', '_blank');">
+      <i class="fas fa-folder-open fa-sm"></i>
+      Open
+    </a>
+  </li>
+  <li class="whatsupdocker-when-disabled d-none">
+    <a href="/whatsupdocker-start" class="terminal-output-link">
+      <i class="fas fa-play fa-sm"></i>
+      Start
+    </a>
+  </li>
+  <li class="whatsupdocker-when-enabled d-none">
+    <a href="/whatsupdocker-pull" class="terminal-output-link" data-env-variable-name="PASSWORD"
+      data-env-variable-question="Give a password" data-env-variable-answer="admin">
+      <i class="fas fa-arrows-rotate fa-sm"></i>
+      Pull latest
+    </a>
+  </li>
+  <li class="whatsupdocker-when-enabled d-none">
+    <a href="/whatsupdocker-remove" class="terminal-output-link">
+      <i class="fas fa-trash-alt fa-sm"></i>
+      Remove
+    </a>
+  </li>
+</ul>

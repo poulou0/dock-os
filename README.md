@@ -96,4 +96,9 @@ sudo docker-compose -f ./dock-os/docker-compose.yml up -d
 
 ### TODO
 
-* Make a 'purge config' button for every entry when its stopped (and/or system prune -a --volumes https://docs.docker.com/engine/reference/commandline/system_prune/)
+* migrate to iconify
+  ```
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <span class="iconify" data-icon="heroicons-outline:user" data-width="24" data-height="24"></span>
+  ```
+  https://icon-sets.iconify.design/

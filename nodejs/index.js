@@ -186,6 +186,12 @@ const requestListener = (req, res) => {
       const buffer = fs.readFileSync("ui-log.txt");
       res.end(buffer.toString());
       break
+    case "/wud/api/containers":
+      exec(`curl -u "${USER}:${PASSWORD}" http://whatsupdocker:3000/api/containers`, (error, stdout, stderr) => {
+        if (error) return console.error(`exec error: ${error}`);
+        res.end(stdout);
+      });
+      break
   }
 }
 

@@ -1,0 +1,17 @@
+version: "2"
+services:
+ whatsupdocker:
+  container_name: whatsupdocker
+  image: getwud/wud
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  ports:
+    - 8018:3000
+  environment:
+    WUD_AUTH_BASIC_ADMIN_USER: "${WUD_USER}"
+    WUD_AUTH_BASIC_ADMIN_HASH: "${WUD_HASH}"
+
+networks:
+  default:
+    external:
+      name: dockOS
